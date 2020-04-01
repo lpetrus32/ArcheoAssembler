@@ -2,6 +2,7 @@
 function show_hideAction(){
     let DataBlock = document.getElementById("DataBlock");
     let BasketBlock = document.getElementById("BasketBlock");
+    let PicsBlock = document.getElementById("PicsBlock");
     let mainBlockHeight = document.getElementById("mainBlock").clientHeight;
     let ButtonText = document.getElementById("show_hideButton");
 
@@ -11,12 +12,29 @@ function show_hideAction(){
         FiltersBlock.style.display = "block";
         BasketBlock.style.height = (mainBlockHeight*0.8)+'px';
         DataBlock.style.height = (mainBlockHeight*0.8)+'px';
+        PicsBlock.style.height = (mainBlockHeight*0.8)+'px';
     }else{
         ButtonText.textContent = "SHOW FILTERS";
         FiltersBlock.style.display = "none";
         BasketBlock.style.height = (mainBlockHeight-6)+'px'; //largeur bordures = 6px
         DataBlock.style.height = (mainBlockHeight-6)+'px';
+        PicsBlock.style.height = (mainBlockHeight-6)+'px';
     }
+}
+
+//Affiche le tableau de métadonnées ou les images les fragments 
+function switchAction(){
+    let DataBlock = document.getElementById("DataBlock");
+    let PicsBlock = document.getElementById("PicsBlock");
+    
+    if(DataBlock.clientHeight != 0){
+        DataBlock.style.display="none";
+        PicsBlock.style.display="block";
+    }else{
+        DataBlock.style.display="block";
+        PicsBlock.style.display="none";
+    }
+
 }
 
 function convertToXML() { // Help : https://github.com/sheetjs/sheetjs#common-spreadsheet-format
