@@ -56,6 +56,15 @@ body{
     height: 80%;
 }
 
+#PicsBlock{
+    display: none;
+    position: absolute ;
+    bottom : 0;
+    left : 0;
+    width: 60%;
+    height: 80%;
+}
+
 #BasketBlock{
     position: absolute ;
     bottom : 0;
@@ -96,8 +105,8 @@ body{
 
 #switchButton{
     position: absolute;
-    right : 0;
-    bottom : -30px;
+    left : 55%;
+    bottom : -25px;
 }
 
 /* OTHERS ---------------------------------------------------*/
