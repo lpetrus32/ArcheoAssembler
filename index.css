@@ -116,3 +116,7 @@ h5{
     top : 1%;
     left:0px;
 }
+
+#datafile{
+    display: none;
+}
