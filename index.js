@@ -19,9 +19,25 @@ function show_hideAction(){
     }
 }
 
+function convertToXML() { // Help : https://github.com/sheetjs/sheetjs#common-spreadsheet-format
+
+}
+
+function handleFile(event) {
+    let file = event.target.files.files[0];
+    let reader = new FileReader();
+    reader.onload = function(event) { // Call-back function.
+      let data = new Uint8Array(event.target.result);
+      let workbook = XLSX.read(data, {type: 'array'});
+      // convertToXML();
+    };
+    reader.readAsArrayBuffer(file); // Load the file then fire the call-back.
+  }
 
 let setupListeners = function(){
-
+    let datafile = document.getElementById("datafile");
+    datafile.addEventListener('change', handleFile, false);
+  
 }
 
 window.onload = setupListeners;
