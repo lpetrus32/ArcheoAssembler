@@ -109,6 +109,12 @@ body{
     bottom : -25px;
 }
 
+#fileButton{
+    position: absolute;
+    right : 1%;
+    bottom : 10%;
+}
+
 /* OTHERS ---------------------------------------------------*/
 #filterBar{
     position: absolute;
