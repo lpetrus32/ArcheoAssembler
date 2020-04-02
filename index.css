@@ -109,10 +109,10 @@ body{
     bottom : -25px;
 }
 
-#fileButton{
+#datafile{
     position: absolute;
-    right : 1%;
-    bottom : 10%;
+    left : 30%;
+    bottom : 50%;
 }
 
 /* OTHERS ---------------------------------------------------*/
@@ -133,5 +133,5 @@ h5{
 }
 
 #datafile{
-    display: none;
+    display: block;
 }
