@@ -97,6 +97,7 @@ body{
     margin : 0.5%;
 }
 
+
 #show_hideButton{
     position : absolute;
     right : 0;
@@ -144,4 +145,14 @@ overflow: auto;
 	}
 table, th, td {
   border: 1px solid black;
+}
+
+/* Affichage des mignatures */
+
+#preview{
+    width: 200px;
+    display: inline-block;
+}
+#preview img{
+    width: 100%;
 }
