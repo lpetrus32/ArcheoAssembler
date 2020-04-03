@@ -7,12 +7,15 @@
   </head>
   <body>
     <header>
+      <button class="button2" id="fileButton">
+        <input type="file" id="datafile" accept="*"> 
+        <label for="datafile">IMPORT FILE</label>
+      </button>
 
     </header>
         <div id="mainBlock">
           <button class="button1" id="show_hideButton" onclick="show_hideAction();">HIDE FILTERS</button>
           <button class="button1" id="switchButton" onclick="switchAction();">SWITCH</button>  
-
             <div class="block" id="FiltersBlock">
               <h5>FILTER BY:</h5>
               <button class="button1" id="resetButton">RESET</button>
@@ -23,13 +26,16 @@
             </div>
 
             <div class="block" id="DataBlock">
-              <input type="file" id="datafile" accept="*"> 
+              <input type="file" id="file" accept="*"> 
+			  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+				<script lang="javascript" src="xls.js"></script>
+				<script lang="javascript" src="sm.js"></script>
               [ici s'affichera le tableau de métadonnées]
             </div>
             <div class="block" id="PicsBlock">
               [ici s'afficheront les images des fragments]
             </div>
-
             <div class="block" id="BasketBlock">
               <h5>YOUR SELECTION:</h5>
               <div id="insideBasketBlock">
