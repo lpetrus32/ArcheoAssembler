@@ -34,6 +34,10 @@
               [ici s'affichera le tableau de métadonnées]
             </div>
             <div class="block" id="PicsBlock">
+              <form action="my-script.php" enctype="multipart/form-data" method="post">
+                <div><input type="file" onchange="handleFiles(files)" id="upload" multiple name="file"></div>
+                <div><label for="upload"><span id="preview"></span></label></div>
+              </form>
               [ici s'afficheront les images des fragments]
             </div>
             <div class="block" id="BasketBlock">
