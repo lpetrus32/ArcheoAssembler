@@ -37,25 +37,71 @@ function switchAction(){
 
 }
 
-function convertToXML() { // Help : https://github.com/sheetjs/sheetjs#common-spreadsheet-format
+// conversion est affichage des donner 
+function filePicked(oEvent) {
+// Get The File From The Input
+var oFile = oEvent.target.files[0];
+var sFilename = oFile.name;
+// Create A File Reader HTML5
+var reader = new FileReader();
 
+// Ready The Event For When A File Gets Selected
+reader.onload = function(e) {
+    var data = e.target.result;
+    var cfb = XLSX.read(data, {type: 'binary'}); // conversion 
+	cfb.SheetNames.forEach(function conv(sheetName) {
+        // Obtain The Current Row As CSV
+        var csvData = XLS.utils.make_csv(cfb.Sheets[sheetName]); 
+		var data=XLS.utils.make_csv(cfb.Sheets[sheetName]); //// conversion xls /xlsx / ods -> csv 
+		var employee_data = data.split(/\r?\n|\r/);
+		let table_data = '<table class="table table-bordered table-striped">'; // affichage
+		for(var count = 0; count<employee_data.length; count++)
+		{
+			var cell_data = employee_data[count].split(",");
+			table_data += '<tr>';
+			for(var cell_count=0; cell_count<cell_data.length; cell_count++)  // affichage
+			{
+					if(count === 0)
+					{
+						table_data += '<th>'+cell_data[cell_count]+'</th>';
+					}
+					else
+					{
+						table_data += '<td>'+cell_data[cell_count]+'</td>';
+					}
+			}
+			table_data += '</tr>';
+		}
+    table_data += '</table>'; // table_data : la conversion csv-> tableau html 
+	//console.log(table_data); //// test html 
+	document.getElementById('DataBlock').innerHTML +=table_data; // affichage 
+	
+		csvData = csvData.split('\n').map(row => row.trim());  //// conversion csv-> xml 
+		let headings = csvData[0].split(',');
+		let xml = ``;
+		xml="<?xml version="+"1.0"+" encoding="+"ISO-8859-1"+" ?>\n"                           
+		for(let i = 1; i < csvData.length; i++) {
+		let details = csvData[i].split(';')
+		xml += "<productData>\n"
+		
+		for(let j = 0; j < headings.length; j++) {
+		xml += `<${headings[j]}>${details[j]}</${headings[j]}>`
+		};								
+		xml += "</productData>\n"; // xml : le fichier xml 
+		};
 }
+);
 
-function handleFile(event) {
-    let file = event.target.files.files[0];
-    let reader = new FileReader();
-    reader.onload = function(event) { // Call-back function.
-      let data = new Uint8Array(event.target.result);
-      let workbook = XLSX.read(data, {type: 'array'});
-      // convertToXML();
-    };
-    reader.readAsArrayBuffer(file); // Load the file then fire the call-back.
-  }
+
+
+        
+	}
+
+// Tell JS To Start Reading The File.. You could delay this if desired
+reader.readAsBinaryString(oFile);}
 
 let setupListeners = function(){
-    let datafile = document.getElementById("datafile");
-    datafile.addEventListener('change', handleFile, false);
-  
+    let datafile = document.getElementById("file");
+    datafile.addEventListener('change', filePicked, false);
 }
-
 window.onload = setupListeners;
