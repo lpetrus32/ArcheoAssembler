@@ -135,3 +135,13 @@ h5{
 #datafile{
     display: block;
 }
+#DataBlock{
+overflow: auto; 	
+}
+@table table-bordered table-striped{
+	table-layout: fixed;
+	width:100%;
+	}
+table, th, td {
+  border: 1px solid black;
+}
