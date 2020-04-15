@@ -1,0 +1,55 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="productData">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="Ndostraconcourant" />
+          <xs:element name="Ndefouille" type="xs:string" />
+          <xs:element name="Ndetrouvaille" type="xs:unsignedByte" />
+          <xs:element name="NSCA" />
+          <xs:element name="sac" />
+          <xs:element name="Datededécouverte" type="xs:unsignedShort" />
+          <xs:element name="Lieudedécouverte" type="xs:string" />
+          <xs:element name="Hauteur" type="xs:decimal" />
+          <xs:element name="Largeur" type="xs:decimal" />
+          <xs:element name="Épaisseur" type="xs:string" />
+          <xs:element name="Codedugroupedepâte" type="xs:string" />
+          <xs:element name="Couleurdelasurfaceextérieure" type="xs:string" />
+          <xs:element name="Structuredelasurfaceextérieure" />
+          <xs:element name="Couleurdelasurfaceintérieure" />
+          <xs:element name="Structuredelasurfaceintérieure" />
+          <xs:element name="Couleurdelacassure" />
+          <xs:element name="Texturedelacassure" />
+          <xs:element name="Naturedelargile" />
+          <xs:element name="Typedevase" />
+          <xs:element name="Partieduvase" />
+          <xs:element name="Datationduvase" />
+          <xs:element name="support" />
+          <xs:element name="Écriture1conv" />
+          <xs:element name="écriture2conv" type="xs:string" />
+          <xs:element name="pigmenttechnique" type="xs:string" />
+          <xs:element name="Angledelinscriptionconv" />
+          <xs:element name="Ncolonnesconv" type="xs:string" />
+          <xs:element name="Nlignesconv" type="xs:string" />
+          <xs:element name="Typedetexteconv" type="xs:unsignedByte" />
+          <xs:element name="Descrtexteconv" type="xs:unsignedByte" />
+          <xs:element name="Translittérationconv" type="xs:string" />
+          <xs:element name="Typededessinconv" />
+          <xs:element name="Descriptiondessinconv" type="xs:string" />
+          <xs:element name="Écriture1conc" />
+          <xs:element name="Écriture2conc" />
+          <xs:element name="Angledelinscriptionconc" />
+          <xs:element name="Nombredecolonnesconc" />
+          <xs:element name="Nombredelignesconc" />
+          <xs:element name="Typedetexteconc" />
+          <xs:element name="Descrtexteconc" />
+          <xs:element name="Translittérationconc" />
+          <xs:element name="Typededessinconc" />
+          <xs:element name="Descriptiondessinconc" />
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
