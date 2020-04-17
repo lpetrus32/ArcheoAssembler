@@ -82,6 +82,9 @@ let loadXML = function loadXML(input) {
 
 
 //FONCTIONS POUR RECUPERER LES VALEURS DE CHAQUE ATTRIBUT DE CHAQUE FRAGMENT///// 
+/*
+var attributs = [], lignes=[], Objects=[];
+
 function readXml(xml){
 	let i=0;
 	let lines = [];
@@ -90,7 +93,7 @@ function readXml(xml){
 	while(i<xml.length){
 		newline="";
 		do{
-		newline+=xml[i];
+		newline=xml.substring(xml.lastIndexOf(""));
 		i++;
 		}while(xml.substring(i+1,i+3)[i] != "\n");
 
@@ -139,6 +142,7 @@ function createObjects(attributs, lignes, list){
 		list.push(objectValues);
 	}
 }
+*/
 
 // conversion est affichage des donner 
 function filePicked(oEvent) {
@@ -151,106 +155,90 @@ function filePicked(oEvent) {
     } else if(/.xml$/.test(sFilename)) { // vérifie que le nom du fichier se termine par .xml
 		loadXML(oFile);
     } else if(/.ods$/.test(sFilename)) {
-		// Create A File Reader HTML5
 		var reader = new FileReader();
 
-		// Ready The Event For When A File Gets Selected
-		reader.onload = function(e) {
-			var data = e.target.result;
-			var cfb = XLSX.read(data, {type: 'binary'}); // conversion 
-			cfb.SheetNames.forEach(function conv(sheetName) {
-				// Obtain The Current Row As CSV
-				var csvData = XLS.utils.make_csv(cfb.Sheets[sheetName]); 
-				var data=XLS.utils.make_csv(cfb.Sheets[sheetName]); //// conversion xls /xlsx / ods -> csv 
-				var employee_data = data.split(/\r?\n|\r/);
-				let table_data = '<table class="table table-bordered table-striped">'; // affichage
-				for(var count = 0; count<employee_data.length; count++)
+	
+	// Ready The Event For When A File Gets Selected
+	reader.onload = function(e) {
+		var data = e.target.result;
+		var cfb = XLSX.read(data, {type: 'binary'}); // conversion 
+			// Obtain The Current Row As CSV
+			var csvData = XLS.utils.make_csv(cfb.Sheets[cfb.SheetNames[0]]); // conversion xls /xlsx / ods -> csv 
+			
+			
+			/*AFFICHAGE DU TABLEAU DEPUIS LE CSV (A RETIRER POUR APPLIQUER SUR LE XML)
+			var employee_data = data.split(/\r?\n|\r/);
+			let table_data = '<table class="table table-bordered table-striped">'; // affichage
+			for(var count = 0; count<employee_data.length; count++)
+			{
+				var cell_data = employee_data[count].split(",");
+				table_data += '<tr>';
+				for(var cell_count=0; cell_count<cell_data.length; cell_count++)  // affichage
 				{
-					var cell_data = employee_data[count].split(",");
-					table_data += '<tr>';
-					for(var cell_count=0; cell_count<cell_data.length; cell_count++)  // affichage
+					if(count === 0)
 					{
-						if(count === 0)
-						{
-							table_data += '<th>'+cell_data[cell_count]+'</th>';
-						}
-						else
-						{
-							table_data += '<td>'+cell_data[cell_count]+'</td>';
-						}
+						table_data += '<th>'+cell_data[cell_count]+'</th>';
 					}
-					table_data += '</tr>';
-				}
-				table_data += '</table>'; // table_data : la conversion csv-> tableau html 
-				//console.log(table_data); //// test html 
-				document.getElementById('DataBlock').innerHTML +=table_data; // affichage 
-
-				csvData = csvData.split('\n').map(row => row.trim());  //// conversion csv-> xml 
-				let headings = csvData[1].split(',').map(row => row.trim());
-				for (z=0 ;z<headings.length;z++){ // pour eliminer les espace et les caractere specieux des balise 
-						for (h=0;h<headings[z].length;h++){
-						headings[z]=headings[z].replace(' ','');// pour les balise ou il y a faute de frappe avec deux espace 
-						headings[z]=headings[z].replace('/','');
-						headings[z]=headings[z].replace("'","");
-						headings[z]=headings[z].replace('°','');
-						headings[z]=headings[z].replace('.','');
+					else
+					{
+						table_data += '<td>'+cell_data[cell_count]+'</td>';
 					}
 				}
+				table_data += '</tr>';
+			}
+			table_data += '</table>'; // table_data : la conversion csv-> tableau html 
+			//console.log(table_data); //// test html 
+			document.getElementById('DataBlock').innerHTML +=table_data; // affichage */
 
-				var xml = ``;
-				xml="<?xml version="+"1.0"+" encoding="+"ISO-8859-1"+" ?>\n";                           
-				for(let i = 2; i < csvData.length; i++) {
+			//Conversion CSV -> XML
+			csvData = csvData.split('\n').map(row => row.trim());  
+			let headings = csvData[0].split(',').map(row => row.trim());
+			for (z=0 ;z<headings.length;z++){ // pour eliminer les espace et les caractere specieux des balise 
+					for (h=0;h<headings[z].length;h++){
+					headings[z]=headings[z].replace(' ','');// pour les balise ou il y a faute de frappe avec deux espace 
+					headings[z]=headings[z].replace('/','');
+					headings[z]=headings[z].replace("'","");
+					headings[z]=headings[z].replace('°','');
+					headings[z]=headings[z].replace('.','');
+				}
+			}
+
+			var xml = ``;
+			xml="<?xml version="+"1.0"+" encoding="+"ISO-8859-1"+" ?>\n";                           
+			for(let i = 2; i < csvData.length; i++) {
 				let details = csvData[i].split(',').map(row => row.trim());
-				xml += "<productData>\n";
-
+				xml += "\n<productData>";
+				
 				for(let j = 0; j < headings.length; j++) {
 					if (headings[j] !== ""){    // condition pour regler le probleme de dimension du tableau 
-				xml += `<${headings[j]}>${details[j]}</${headings[j]}>`;
+						xml += `<${headings[j]}>${details[j]}</${headings[j]}>`;
 					}
 				};								
 				xml += "\n</productData>\n"; // xml : le fichier xml 
+				
+			};
 
-				};
+				/*//Fonction pour télécharger le .xml
+				var hiddenElement = document.createElement('a');
 
-				/*
-				//Function to download data to a file
-				function download(data, filename, type) {
-					var file = new Blob([data], {type: type});
-					if (window.navigator.msSaveOrOpenBlob) // IE10+
-						window.navigator.msSaveOrOpenBlob(file, filename);
-					else { // Others
-						var a = document.createElement("a"),
-								url = URL.createObjectURL(file);
-						a.href = url;
-						a.download = filename;
-						document.body.appendChild(a);
-						a.click();
-						setTimeout(function() {
-							document.body.removeChild(a);
-							window.URL.revokeObjectURL(url);  
-						}, 0); 
-					}
-				}*/
-
-			}
-			);
+				hiddenElement.href = 'data:attachment/text,' + encodeURI(xml);
+				hiddenElement.target = '../Data/';
+				hiddenElement.download = 'data.xml';
+				hiddenElement.click();*/
 
 
+	//creation de la liste de fragments :
+	/*lignes = readXml(xml);
 
-		/*//creation de la liste de fragments :
-		lignes = readXml(xml);
+	attributs = getXmlAttributes(lignes[0]);
+	createObjects(attributs,lignes,Objects); //liste de la liste des valeurs de chaque fragment
+											
+	console.log(Objects[0][1]);*/
 
-		attributs = getXmlAttributes(lignes[0]);
-		createObjects(attributs,lignes,Objects); //liste de la liste des valeurs de chaque fragment
-
-		console.log(Objects[0][1]);	*/
-		}
-	// Tell JS To Start Reading The File.. You could delay this if desired
-	reader.readAsBinaryString(oFile);
 	}
+// Tell JS To Start Reading The File.. You could delay this if desired
+reader.readAsBinaryString(oFile);
 }
-
-var attributs = [], lignes=[], Objects=[];
 
 let setupListeners = function(){
     let datafile = document.getElementById("file");
