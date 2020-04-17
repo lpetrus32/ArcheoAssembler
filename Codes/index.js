@@ -51,7 +51,7 @@ function show_hideAction(){
     }
 }
 
-//Affiche le tableau de métadonnées ou les images les fragments 
+//Switch entre le tableau de métadonnées ou les images les fragments 
 function switchAction(){
     let DataBlock = document.getElementById("DataBlock");
     let PicsBlock = document.getElementById("PicsBlock");
@@ -77,6 +77,7 @@ let loadXML = function loadXML(input) {
     }
     reader.onload = content;
     reader.readAsText(input);
+	console.log(xmlDoc);
 }
 
 
