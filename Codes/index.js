@@ -162,11 +162,9 @@ function filePicked(oEvent) {
 	reader.onload = function(e) {
 		var data = e.target.result;
 		var cfb = XLSX.read(data, {type: 'binary'}); // conversion 
-			// Obtain The Current Row As CSV
-			var csvData = XLS.utils.make_csv(cfb.Sheets[cfb.SheetNames[0]]); // conversion xls /xlsx / ods -> csv 
-			
-			
-			/*AFFICHAGE DU TABLEAU DEPUIS LE CSV (A RETIRER POUR APPLIQUER SUR LE XML)
+		// Obtain The Current Row As CSV
+		var csvData = XLS.utils.make_csv(cfb.Sheets[cfb.SheetNames[0]]); // conversion xls /xlsx / ods -> csv 
+		/*AFFICHAGE DU TABLEAU DEPUIS LE CSV (A RETIRER POUR APPLIQUER SUR LE XML)
 			var employee_data = data.split(/\r?\n|\r/);
 			let table_data = '<table class="table table-bordered table-striped">'; // affichage
 			for(var count = 0; count<employee_data.length; count++)
@@ -200,23 +198,21 @@ function filePicked(oEvent) {
 					headings[z]=headings[z].replace("'","");
 					headings[z]=headings[z].replace('°','');
 					headings[z]=headings[z].replace('.','');
-				}
-			}
-
-			var xml = ``;
-			xml="<?xml version="+"1.0"+" encoding="+"ISO-8859-1"+" ?>\n";                           
-			for(let i = 2; i < csvData.length; i++) {
-				let details = csvData[i].split(',').map(row => row.trim());
-				xml += "\n<productData>";
-				
-				for(let j = 0; j < headings.length; j++) {
-					if (headings[j] !== ""){    // condition pour regler le probleme de dimension du tableau 
-						xml += `<${headings[j]}>${details[j]}</${headings[j]}>`;
 					}
-				};								
-				xml += "\n</productData>\n"; // xml : le fichier xml 
-				
-			};
+			}
+		let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+                xml += "<Artefacts>\n";
+		for(let i = 2; i < csvData.length; i++) {
+                    let details = csvData[i].split(',').map(row => row.trim());
+                    xml += "<Ostracon>\n";
+                    for(let j = 0; j < headings.length; j++) {
+                        if (headings[j] !== ""){    // condition pour regler le probleme de dimension du tableau 
+                            xml += `<${headings[j]}>${details[j]}</${headings[j]}>`;
+                        }
+                    }
+                    xml += "\n</Ostracon>\n"; // xml : le fichier xml 
+		}
+		xml += "</Artefacts>\n";
 
 				/*//Fonction pour télécharger le .xml
 				var hiddenElement = document.createElement('a');
@@ -238,6 +234,33 @@ function filePicked(oEvent) {
 	}
 // Tell JS To Start Reading The File.. You could delay this if desired
 reader.readAsBinaryString(oFile);
+    }
+}
+
+let attributs = [], lignes=[], Objects=[];
+// - Ajoute des divs html contentant les references aux attributs (leur nom)
+// - Stocke le nom des attributs et les valeurs prisent par chaque ostracon dans les arrays correspondant
+let getMD = function(xdoc) {
+    let ostracaList = xdoc.documentElement.childNodes;
+    let block = document.getElementById("insideFiltersBlock"); // contiendra les divs crees
+    for (let i = 1; i < ostracaList.length - 1; i++) {
+        if (ostracaList[i].nodeType === 1) { // verifie qu'il s'agit d'un noeud correspondant a un ostracon
+            let mdList = ostracaList[i].childNodes; // liste des noeuds attributs
+            let valuesList = [];
+            for (let j = 1; j < mdList.length - 1; j++) {
+                if (i === 1) { // genere les divs
+                    attributs.push(mdList[j].nodeName);
+                    let elem = document.createElement("div");
+                    elem.setAttribute("id", mdList[j].nodeName);
+                    let txt = document.createTextNode(mdList[j].nodeName);
+                    elem.appendChild(txt);
+                    elem.style.display = "none";
+                    block.appendChild(elem);
+                }
+                valuesList.push(mdList[j].textContent);
+            }
+            lignes.push(valuesList);
+        }
     }
 }
 
