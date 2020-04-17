@@ -1,3 +1,4 @@
+
 // Affichage des mignatures
 function handleFiles(files) {
 	var imageType = /^image\//;
@@ -65,7 +66,6 @@ function switchAction(){
 
 }
 
-// Ouvre un fichier XML fournit en input et recupere son DOM dans une variable globale
 
 let xmlDoc;
 
@@ -78,6 +78,7 @@ let loadXML = function loadXML(input) {
     reader.onload = content;
     reader.readAsText(input);
 }
+
 
 //FONCTIONS POUR RECUPERER LES VALEURS DE CHAQUE ATTRIBUT DE CHAQUE FRAGMENT///// 
 function readXml(xml){
@@ -143,11 +144,12 @@ function filePicked(oEvent) {
 	// Get The File From The Input
 	var oFile = oEvent.target.files[0];
 	var sFilename = oFile.name;
+    console.log(sFilename);
 	if(!oFile) {
 		alert("Failed to load file");
-    	} else if(/.xml$/.test(sFilename)) { // vérifie que le nom du fichier se termine par .xml
+    } else if(/.xml$/.test(sFilename)) { // vérifie que le nom du fichier se termine par .xml
 		loadXML(oFile);
-    	} else if(/.ods$/.test(sFilename)) {
+    } else if(/.ods$/.test(sFilename)) {
 		// Create A File Reader HTML5
 		var reader = new FileReader();
 
@@ -246,9 +248,8 @@ function filePicked(oEvent) {
 	reader.readAsBinaryString(oFile);
 	}
 }
+
 var attributs = [], lignes=[], Objects=[];
-
-
 
 let setupListeners = function(){
     let datafile = document.getElementById("file");
