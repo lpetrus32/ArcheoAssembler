@@ -74,10 +74,10 @@ let loadXML = function loadXML(input) {
     let content = function(e) { // attend l'ouverture du fichier XML avant de s'executer 
         let parser = new DOMParser();
         xmlDoc = parser.parseFromString(reader.result,"text/xml");
+	getMD(xmlDoc);
     }
     reader.onload = content;
     reader.readAsText(input);
-	console.log(xmlDoc);
 }
 
 
