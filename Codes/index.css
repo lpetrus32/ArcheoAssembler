@@ -117,11 +117,7 @@ body{
     bottom : 50%;
    display: block;
 }
-#file:active{
-	position:fixed;
-	right : 5px;
-	bottom : -25px;
-}
+
 
 /* OTHERS ---------------------------------------------------*/
 #filterChamp{
