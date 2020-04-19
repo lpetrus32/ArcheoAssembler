@@ -54,6 +54,7 @@ body{
     left : 0;
     width: 60%;
     height: 80%;
+    overflow: auto; 
 }
 
 #PicsBlock{
@@ -110,10 +111,16 @@ body{
     bottom : -25px;
 }
 
-#datafile{
+#file{
     position: absolute;
     left : 30%;
     bottom : 50%;
+   display: block;
+}
+#file:active{
+	position:absolute;
+	right : 5px;
+	bottom : -25px;
 }
 
 /* OTHERS ---------------------------------------------------*/
@@ -121,7 +128,6 @@ body{
     position: absolute;
     bottom : 10%;
     left : 0.5%;
-    width: auto;
 }
 
 h5{
@@ -133,12 +139,7 @@ h5{
     left:0px;
 }
 
-#datafile{
-    display: block;
-}
-#DataBlock{
-overflow: auto; 	
-}
+
 @table table-bordered table-striped{
 	table-layout: fixed;
 	width:100%;
