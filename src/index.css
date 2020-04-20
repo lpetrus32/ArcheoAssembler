@@ -1,0 +1,231 @@
+/*
+ArcheoAssembler. Project
+M1 BioInformatique
+Projet de programmation
+Référente/Cliente : Ostertag Cécilia
+*/
+
+html, body {
+    margin: 0;
+}
+
+html{
+    height: 100%;
+}
+
+h1 {
+    padding-top: 0%;
+    margin-left : 0.5%;
+    margin-bottom: 0.75%;
+    text-align: left;
+    margin-top:10px;
+    color: #111;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-weight: bold;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+h2 {
+    color: #111;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 30px; font-weight: 300;
+    line-height: 32px; margin: 0 0 72px;
+    text-align: center;
+}
+
+span {
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    color: white;
+}
+
+/* ------------------------------------------------ BLOCS---------------------------------------------------*/
+header{
+    
+    position: fixed;
+    top: 0;
+    height: auto;
+    width: 90%;
+    padding:0;
+    margin-left: 5%;
+    border-bottom:1px solid black;
+}
+
+body{
+    background-color: white;
+    margin: 0;
+    padding : 0;
+    font-family: 'Helvetica Neue', sans-serif;
+}
+
+/*Bloc principal*/
+#mainBlock{ 
+    margin:0;
+    padding: 0;
+    position : fixed;
+    top : 18%;
+    left : 5%;
+    right: 5%;
+    width: 90%;
+    height: 75%;
+}
+#FiltersBlock{
+    position: relative ;
+    top : 0;
+    left:0;
+    right : 0;
+    height: 15%;
+}
+#insideFiltersBlock{
+    background-color: honeydew; /*à retirer*/
+    position: absolute;
+    bottom: 5%;
+    right: 8%;
+    height: 55%;
+    left : 8%;
+}
+
+/*Bloc tableau*/
+#DataBlock{
+    position: absolute ;
+    bottom : 0;
+    left : 0;
+    right:0;
+    height: 80%;
+    overflow: auto; 	
+}
+
+/*Bloc images*/
+#PicsBlock{
+    background-color: aliceblue;
+    display: none;
+    position: absolute ;
+    bottom : 0;
+    left : 0;
+    right: 0;
+    height: 80%;
+}
+
+/*Bloc selection*/
+#BasketBlock{
+    position: fixed ;
+    top: 18%;
+    bottom : 0;
+    right: -406px;
+    width: 400px;
+    height: 75%;
+}
+#insideBasketBlock{
+    background-color: honeydew; /*à retirer*/
+    position: absolute ;
+    bottom : 0;
+    width: 100%;
+    height: 90%;
+}
+#show_hideSelection{
+    background-color: lightgray;
+    position: relative;
+    top:0px;
+    left: -10%;
+    width: 10%;
+    height: 10%;
+}
+
+.block{
+    background-color: lightgrey;
+    padding: 0;
+    border-style: groove;
+    border-color: darkgrey;
+    border-collapse: collapse;
+    border-width: 3px;
+}
+
+
+
+/* ------------------------------------------------ BUTTONS ---------------------------------------------------*/
+#resetButton{
+    position: absolute;
+    right :0;
+    margin : 0.5%;
+    font-family: 'Helvetica Neue', sans-serif;
+}
+
+
+#show_hideButton{
+    position : absolute;
+    right : 0;
+    top : -5%;
+    font-family: 'Helvetica Neue', sans-serif;
+}
+
+#switchButton{
+    position: absolute;
+    left : 0;
+    bottom : -25px;
+    font-family: 'Helvetica Neue', sans-serif;
+}
+
+select{
+    width: 20%;
+    left : 8%;
+}
+
+
+/* ------------------------------------------------ DATA TABLE ------------------------------------------------*/
+table {
+    table-layout: fixed;
+    width: 150px;
+    border-collapse: collapse;
+    border: unset;
+    letter-spacing: 0;
+    font-size: 1rem;
+}
+
+td, th {
+    padding: 0;
+    border: 2px solid white;
+}
+
+tbody {
+    background: white;
+}
+
+th {
+    background: darkblue;
+    color: white;
+    border: 2px solid rgb(190, 190, 190);
+    padding: 0;
+    width: 170px;
+    overflow: hidden;
+}
+
+td {
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+tr:nth-child(even) {
+    background: lightblue;
+}
+
+
+/* OTHERS ---------------------------------------------------*/
+#chooseFilter{
+    position: absolute;
+    top:5%;
+    left : 8%;
+    width: 80%;
+}
+
+
+/* Affichage des mignatures */
+
+#preview{
+    width: 200px;
+    display: inline-block;
+}
+#preview img{
+    width: 100%;
+}
