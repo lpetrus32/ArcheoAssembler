@@ -13,6 +13,66 @@ html{
     height: 100%;
 }
 
+body{
+    background-color: white;
+    margin: 0;
+    padding : 0;
+    font-family: 'Helvetica Neue', sans-serif;
+}
+#menu {
+    position: absolute;
+    bottom: 0;
+    right:0;
+    padding: 0%;
+    text-align: right;
+    margin-top:0;
+
+}
+
+#restart {
+    border: none;
+    background-color: transparent;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+}
+
+#tutorials {
+    border: none;
+    background-color: transparent;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+}
+
+#contacts {
+    border: none;
+    background-color: transparent;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+}
+
+/* ------------------------------------------------ FOOTER ---------------------------------------------------*/
+
+footer {
+    position: fixed;
+    bottom: 0;
+    margin: 0;
+    padding-left: 2%;
+    font-size: 12px;
+}
+/* ------------------------------------------------ HEADER ---------------------------------------------------*/
+
+header{
+    
+    position: fixed;
+    top: 0;
+    height: auto;
+    width: 90%;
+    padding:0;
+    margin-left: 5%;
+    border-bottom:1px solid black;
+}
+
+/* ArcheoAssembler. */
 h1 {
     padding-top: 0%;
     margin-left : 0.5%;
@@ -26,39 +86,39 @@ h1 {
     line-height: 1;
 }
 
-h2 {
-    color: #111;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 30px; font-weight: 300;
-    line-height: 32px; margin: 0 0 72px;
-    text-align: center;
-}
-
 span {
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     color: white;
 }
 
-/* ------------------------------------------------ BLOCS---------------------------------------------------*/
-header{
-    
-    position: fixed;
-    top: 0;
-    height: auto;
-    width: 90%;
-    padding:0;
-    margin-left: 5%;
-    border-bottom:1px solid black;
-}
-
-body{
-    background-color: white;
-    margin: 0;
-    padding : 0;
+#menu {
+    position: absolute;
+    bottom: 0;
+    right:0;
+    padding: 0%;
+    text-align: right;
+    margin-top:0;
+    color: #111;
     font-family: 'Helvetica Neue', sans-serif;
+    letter-spacing: -1px;
+    word-spacing: 70px;
 }
 
-/*Bloc principal*/
+
+/* ------------------------------------------------ BLOCKS---------------------------------------------------*/
+
+
+.block{
+    background-color: lightgrey;
+    padding: 0;
+    border-style: groove;
+    border-color: black;
+    border-collapse: collapse;
+    border-radius: 3px;
+    border-width: 1px;
+}
+
+/* Main block */
 #mainBlock{ 
     margin:0;
     padding: 0;
@@ -69,8 +129,10 @@ body{
     width: 90%;
     height: 75%;
 }
+
+/* Filters sub-block */
 #FiltersBlock{
-    position: relative ;
+    position: absolute ;
     top : 0;
     left:0;
     right : 0;
@@ -80,12 +142,25 @@ body{
     background-color: honeydew; /*à retirer*/
     position: absolute;
     bottom: 5%;
-    right: 8%;
+    right: 15%;
     height: 55%;
     left : 8%;
 }
+#chooseFilter{
+    position: absolute;
+    top:5%;
+    left : 8%;
+    width: 80%;
+}
+#tableSize{
+    position: absolute;
+    margin : 0;
+    font-size: 1rem;
+    right: 1%;
+    bottom: 1%
+}
 
-/*Bloc tableau*/
+/* Table sub-block */
 #DataBlock{
     position: absolute ;
     bottom : 0;
@@ -94,8 +169,18 @@ body{
     height: 80%;
     overflow: auto; 	
 }
+#loading{
+    position: absolute;
+    width: 100%;
+    top:0;
+    bottom:0;
+    vertical-align: middle;
+    text-align: center;
+    background-color: lightslategray;
+    visibility:hidden;
+}
 
-/*Bloc images*/
+/* Pictures sub-block */
 #PicsBlock{
     background-color: aliceblue;
     display: none;
@@ -106,43 +191,28 @@ body{
     height: 80%;
 }
 
-/*Bloc selection*/
-#BasketBlock{
+/* Selection sub-block */
+#selectionBlock{
     position: fixed ;
+    margin:0;
     top: 18%;
-    bottom : 0;
     right: -406px;
     width: 400px;
     height: 75%;
 }
-#insideBasketBlock{
+#insideSelectionBlock{
     background-color: honeydew; /*à retirer*/
     position: absolute ;
     bottom : 0;
     width: 100%;
     height: 90%;
 }
-#show_hideSelection{
-    background-color: lightgray;
-    position: relative;
-    top:0px;
-    left: -10%;
-    width: 10%;
-    height: 10%;
-}
-
-.block{
-    background-color: lightgrey;
-    padding: 0;
-    border-style: groove;
-    border-color: darkgrey;
-    border-collapse: collapse;
-    border-width: 3px;
-}
 
 
 
 /* ------------------------------------------------ BUTTONS ---------------------------------------------------*/
+
+
 #resetButton{
     position: absolute;
     right :0;
@@ -151,7 +221,7 @@ body{
 }
 
 
-#show_hideButton{
+#show_hideFiltersButton{
     position : absolute;
     right : 0;
     top : -5%;
@@ -160,18 +230,39 @@ body{
 
 #switchButton{
     position: absolute;
-    left : 0;
+    right : 0;
     bottom : -25px;
     font-family: 'Helvetica Neue', sans-serif;
 }
 
+#file{
+    position: absolute;
+    top : 50%;
+    right: 0;
+    width: 100%;
+    text-align: center;
+}
+
+#show_hideSelectionButton{
+    background-color: lightgray;
+    position: relative;
+    top:0px;
+    left: -10%;
+    width: 10%;
+    height: 10%;
+}
+
+/* Dropdown lists */
 select{
     width: 20%;
     left : 8%;
 }
 
 
+
 /* ------------------------------------------------ DATA TABLE ------------------------------------------------*/
+
+
 table {
     table-layout: fixed;
     width: 150px;
@@ -210,22 +301,10 @@ tr:nth-child(even) {
     background: lightblue;
 }
 
-
-/* OTHERS ---------------------------------------------------*/
-#chooseFilter{
-    position: absolute;
-    top:5%;
-    left : 8%;
-    width: 80%;
+tr:hover{
+    background-color: lightslategray;
 }
 
 
-/* Affichage des mignatures */
 
-#preview{
-    width: 200px;
-    display: inline-block;
-}
-#preview img{
-    width: 100%;
-}
+/* ------------------------------------------------ OTHERS ------------------------------------------------*/
