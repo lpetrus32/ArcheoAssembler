@@ -181,40 +181,123 @@ let getMD = function(xdoc) {
 	showData(attributs, updatedList);
 
 	// Create the attributes dropdown list
-	for (let a = 0; a < attributs.length; a++) {
+	let AttrLen = attributs.length;
+	for (let a = 0; a < AttrLen; a++) {
 		document.getElementById("attributesMenu").innerHTML+=`<option id="${attributs[a]}" value="${attributs[a]}">${attributs[a]}<br>`;
 	}
 
 	displayPossibleValues();
+
 }
-
-
 
 
 //--------------------------------------- DISPLAYS ---------------------------------------//
 
+/*
 // Display Table
 function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = remaining ostraca after filtering process
 	let TableBody = document.getElementById("tbody");
 	let Attributes = document.getElementById("attributes");
 	let Ostracon;
+	let FiltLen = filteredOstr.length;
+	let AttrLen = Attr.length;
 	document.getElementById("tableSize").innerHTML=`Table size = ${updatedList.length}`;
 
 	TableBody.innerHTML="";
-	for (let i = 0; i < Attr.length; i++) {
+	for (let i = 0; i < AttrLen; i++) {
 		Attributes.innerHTML+=`<th scope="col">${Attr[i]}</th>`; // colnames
 	}
-	for (let i = 0; i < filteredOstr.length; i++) {
+	for (let i = 0; i < FiltLen; i++) {
 		TableBody.innerHTML+=`<tr id="ostraca${i}"></tr>`; // row creation for each ostracon
 		Ostracon = document.getElementById(`ostraca${i}`); // keep the row
-		for (let j = 0; j < filteredOstr[i].length; j++) {
-			Ostracon.innerHTML+=`<td>${filteredOstr[i][j]}</td>`; // cell creation with for each value
+		let FiltLen_i = filteredOstr[i].length;
+		for (let j = 0; j < FiltLen_i; j++) {
+			Ostracon.innerHTML+=`<td>${filteredOstr[i][j]}</td>`; // cell creation for each value
 		}
 	}
 
 	document.getElementById("loading").style.visibility = "hidden";
+}*/
+
+// Display Table
+function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = remaining ostraca after filtering process
+	document.getElementById("tableSize").textContent=`Table size = ${filteredOstr.length}`;
+	
+	let TableBody = document.getElementById("tbody");
+	let Attributs = document.getElementById("attributes");
+	let att='';
+	let tableau='';   // chaine de caractere du tableau 
+	for (let i = 0; i < Attr.length; i++) {
+		att+=`<th scope="col">${Attr[i]}</th>`; // colnames
+	}
+	Attributs.innerHTML+=att;
+	for (let i = 0; i < filteredOstr.length; i++) {
+		tableau+=`<tr id="ostraca${i}">`; // row creation for each ostracon
+		for (let j = 0; j < filteredOstr[i].length; j++) {
+			if (j === 1 )
+			{
+				tableau+=`<td onclick="selectionner( this)" class ="selectionnee"><input type="hidden"  value="${filteredOstr[i][j]}">${filteredOstr[i][j]}</td>`; // que la colonne des ndefouille cliquable 
+			}
+			else 
+			{	
+				tableau+=`<td>${filteredOstr[i][j]}</td>`; // cell creation with for each value
+			}
+		}
+		tableau+=`</tr>`;
+	}
+	TableBody.innerHTML+=tableau;
+	document.getElementById("loading").style.visibility = "hidden";
 }
 
+function selectionner(obj)
+{
+	// récup. de tous les INPUT de la TD passée en paramètre
+  var oInput = obj.getElementsByTagName('input');
+  // recuperer la value == ndefouille == imagename 
+  imagename = oInput[0].value;
+  afficherselection(imagename);
+}
+var panier =[]; // variable global des photo choisis qu on va utiliser pour lancer le python 
+function afficherselection(imagename)
+{
+	var maDiv = document.getElementById("insideBasketBlock");
+	var listeimage=["17-36-4_213 Ostrakon klein.jpg","17-36-4_214 Ostrakon Senet (1).jpg","17-36-4_220 Ostrakon.JPG","17-36-4_242 Ostrakon.JPG","17-36-4_266 Ostrakon.JPG","17-36-4_301 Ostrakon (2).JPG","17-36-4_379 Ostrakon (2).JPG","17-36-4_388 Ostrakon.JPG","17-36-4_410 Ostrakon (1).JPG","17-36-4_423 Ostrakon.JPG","17-36-4_447 Ostrakon Falke (2).JPG","17-36-4_459 Ostrakon (3) Kartusche.JPG","17-36-4_501 Ostrakon.JPG","17-36-4_742 Ostrakon.JPG","17-36-4_819 Ostrakon.JPG","17-36-4_846 Ostrakon.JPG"];								// pour l instant en brute en attendant de generer la liste automatiquement 
+	var test = 0;
+	for (h=0;h<imagename.length;h++)
+	{
+		imagename=imagename.replace('/','_');
+	}
+																// regler le probleme des (/) dans les nde fouille 
+																// chercher le motif dans la liste des photos
+																// ajout de l extension et creation du chemain  // il y a un probleme d extension (parfois jpg et d autre JPG) // autre probleme il y a pas que ndefouille dans le nom de l image
+
+	for (i=0 ;i<listeimage.length;i++)
+	{
+		var position = listeimage[i].indexOf(imagename);
+		if (position !== -1)											// si on trouve le motif dans un nom d image 
+		{	
+			let src ="../Data/Pictures/"+listeimage[i];   				// source de  l image 
+			let classe="photoselectionnee"; 							// creer une class
+			let alt ="Problème avec le chargement de l'image"; 			// alternative si probleme de chargement 
+			let monImage=`<img  src="${src}" class="${classe}" alt="${alt}">`; // creation de la balise
+			if(panier. indexOf(monImage) === - 1)
+			{
+				panier.push(monImage);										// la variable panier sert a rien puisque reinitialiser a chaque click  solution peut etre la passer en global
+				maDiv.innerHTML+=monImage;									// afficher l image 
+			}
+			else 
+			{
+				alert("vous avez deja selectionner cette donnes dans votre panier");
+			}// afficher l image 
+			test=1 ;
+
+		}
+	}
+	if( test === 0)       												 // sinon afficher une alert pas de photo disponible 
+	{
+		alert("pas de photo disponible pour ces données!");
+	}
+}
 
 //--------------------------------------- FILTERING ---------------------------------------//
 
