@@ -308,3 +308,17 @@ tr:hover{
 
 
 /* ------------------------------------------------ OTHERS ------------------------------------------------*/
+
+.selectionnee  					 /*pour le curseur sur les cellule ndefouille*/
+{
+	 cursor: pointer;
+}
+.selectionnee:hover
+{
+	box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.photoselectionnee 				/*pour la taille des image dans le panier*/
+{
+		width : 200px;
+		height: 200px;
+}
