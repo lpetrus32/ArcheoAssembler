@@ -47,12 +47,6 @@ Référente/Cliente : Ostertag Cécilia
 
               <div id="loading">Downloading ...</div>
               
-              <!--Conversion-->
-              <script src="../lib/jszip.js"></script>
-              <script src="../lib/xlsx.js"></script>
-              <script lang="javascript" src="../lib/xls.js"></script>
-              <script lang="javascript" src="../lib/sm.js"></script>
-              
               <!--Table-->
               <table id="table">
                 <thead>
@@ -75,12 +69,20 @@ Référente/Cliente : Ostertag Cécilia
               <h5>YOUR SELECTION:</h5>
               <div id="insideSelectionBlock"></div>
               <button id="show_hideSelectionButton" onclick="showSelection()"><</button>
+              <button id="patchButton" onclick="alert('Please choose 1 fragment to create patches')">CREATE PATCHES</button>
+              <button id="assemblyButton" onclick="alert('Please choose at least 2 fragments to try an assembly')">START ASSEMBLY</button>
             </div>
         </div>
     <footer>
       <a id="bas"></a>
       <p>© 2020 Université de Bordeaux</p>
     </footer>
+    <!--Conversion-->
+    <script src="../lib/jszip.js"></script>
+    <script src="../lib/xlsx.js"></script>
+    <script lang="javascript" src="../lib/xls.js"></script>
+    <script lang="javascript" src="../lib/sm.js"></script>
+    
     <script src="index.js"></script>
   </body>
 </html>
