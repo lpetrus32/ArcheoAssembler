@@ -182,9 +182,11 @@ let getMD = function(xdoc) {
 
 	// Create the attributes dropdown list
 	let AttrLen = attributs.length;
+	let menu = "";
 	for (let a = 0; a < AttrLen; a++) {
-		document.getElementById("attributesMenu").innerHTML+=`<option id="${attributs[a]}" value="${attributs[a]}">${attributs[a]}<br>`;
+		menu+=`<option id="${attributs[a]}" value="${attributs[a]}">${attributs[a]}<br>`;
 	}
+	document.getElementById("attributesMenu").innerHTML=menu;
 
 	displayPossibleValues();
 
@@ -193,31 +195,6 @@ let getMD = function(xdoc) {
 
 //--------------------------------------- DISPLAYS ---------------------------------------//
 
-/*
-// Display Table
-function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = remaining ostraca after filtering process
-	let TableBody = document.getElementById("tbody");
-	let Attributes = document.getElementById("attributes");
-	let Ostracon;
-	let FiltLen = filteredOstr.length;
-	let AttrLen = Attr.length;
-	document.getElementById("tableSize").innerHTML=`Table size = ${updatedList.length}`;
-
-	TableBody.innerHTML="";
-	for (let i = 0; i < AttrLen; i++) {
-		Attributes.innerHTML+=`<th scope="col">${Attr[i]}</th>`; // colnames
-	}
-	for (let i = 0; i < FiltLen; i++) {
-		TableBody.innerHTML+=`<tr id="ostraca${i}"></tr>`; // row creation for each ostracon
-		Ostracon = document.getElementById(`ostraca${i}`); // keep the row
-		let FiltLen_i = filteredOstr[i].length;
-		for (let j = 0; j < FiltLen_i; j++) {
-			Ostracon.innerHTML+=`<td>${filteredOstr[i][j]}</td>`; // cell creation for each value
-		}
-	}
-
-	document.getElementById("loading").style.visibility = "hidden";
-}*/
 
 // Display Table
 function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = remaining ostraca after filtering process
@@ -225,8 +202,8 @@ function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = 
 	
 	let TableBody = document.getElementById("tbody");
 	let Attributs = document.getElementById("attributes");
-	let att='';
-	let tableau='';   // chaine de caractere du tableau 
+	let att="";
+	let tableau="";   // chaine de caractere du tableau 
 	for (let i = 0; i < Attr.length; i++) {
 		att+=`<th scope="col">${Attr[i]}</th>`; // colnames
 	}
@@ -245,7 +222,7 @@ function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = 
 		}
 		tableau+=`</tr>`;
 	}
-	TableBody.innerHTML+=tableau;
+	TableBody.innerHTML=tableau;
 	document.getElementById("loading").style.visibility = "hidden";
 }
 
@@ -257,57 +234,78 @@ function selectionner(obj)
   imagename = oInput[0].value;
   afficherselection(imagename);
 }
+
 var panier =[]; // variable global des photo choisis qu on va utiliser pour lancer le python 
-function afficherselection(imagename)
-{
-	var maDiv = document.getElementById("insideBasketBlock");
+function afficherselection(imagename){
+	var maDiv = document.getElementById("insideSelectionBlock");
 	var listeimage=["17-36-4_213 Ostrakon klein.jpg","17-36-4_214 Ostrakon Senet (1).jpg","17-36-4_220 Ostrakon.JPG","17-36-4_242 Ostrakon.JPG","17-36-4_266 Ostrakon.JPG","17-36-4_301 Ostrakon (2).JPG","17-36-4_379 Ostrakon (2).JPG","17-36-4_388 Ostrakon.JPG","17-36-4_410 Ostrakon (1).JPG","17-36-4_423 Ostrakon.JPG","17-36-4_447 Ostrakon Falke (2).JPG","17-36-4_459 Ostrakon (3) Kartusche.JPG","17-36-4_501 Ostrakon.JPG","17-36-4_742 Ostrakon.JPG","17-36-4_819 Ostrakon.JPG","17-36-4_846 Ostrakon.JPG"];								// pour l instant en brute en attendant de generer la liste automatiquement 
-	var test = 0;
-	for (h=0;h<imagename.length;h++)
-	{
-		imagename=imagename.replace('/','_');
-	}
-																// regler le probleme des (/) dans les nde fouille 
-																// chercher le motif dans la liste des photos
-																// ajout de l extension et creation du chemain  // il y a un probleme d extension (parfois jpg et d autre JPG) // autre probleme il y a pas que ndefouille dans le nom de l image
+	let presence = true;
 
-	for (i=0 ;i<listeimage.length;i++)
-	{
-		var position = listeimage[i].indexOf(imagename);
-		if (position !== -1)											// si on trouve le motif dans un nom d image 
-		{	
-			let src ="../Data/Pictures/"+listeimage[i];   				// source de  l image 
-			let classe="photoselectionnee"; 							// creer une class
-			let alt ="Problème avec le chargement de l'image"; 			// alternative si probleme de chargement 
-			let monImage=`<img  src="${src}" class="${classe}" alt="${alt}">`; // creation de la balise
-			if(panier. indexOf(monImage) === - 1)
-			{
-				panier.push(monImage);										// la variable panier sert a rien puisque reinitialiser a chaque click  solution peut etre la passer en global
-				maDiv.innerHTML+=monImage;									// afficher l image 
+	imagename=imagename.replace(/\//,'_');
+	
+												// regler le probleme des (/) dans les nde fouille 
+												// chercher le motif dans la liste des photos
+												// ajout de l extension et creation du chemain  // il y a un probleme d extension (parfois jpg et d autre JPG) // autre probleme il y a pas que ndefouille dans le nom de l image
+
+	for (i=0 ;i<listeimage.length;i++){
+		if (listeimage[i].indexOf(imagename) != -1){		// si on trouve le motif dans un nom d image 
+									
+			if(panier.indexOf(listeimage[i]) == -1){
+			
+				let src ="../Data/Pictures/"+listeimage[i];   				// source de  l image 	
+				
+				panier.push(listeimage[i]);
+				console.log(panier);
+				maDiv.innerHTML+=`<div id="${listeimage[i]}" class="selectionBoxes"><img src="${src}" class="photoselectionnee" alt="Loading error"><br><label>${listeimage[i].split(".")[0]}</label></div>`;	// afficher l image 
+				document.getElementById(listeimage[i]).innerHTML+=`<button class="delSelecButton" onclick="deleteSelection('${listeimage[i]}')">X</button>`;
+				//gestion des boutons
+				let panierLength = panier.length;
+				if(panierLength == 1){
+					//document.getElementById("patchButton").onclick = CreatePatchs;
+					document.getElementById("assemblyButton").onclick="alert('Please choose at least 2 fragments to try an assembly')";
+				}else if(panierLength == 0 ){
+					document.getElementById("patchButton").onclick = "alert('Please choose 1 fragment to create patches')";
+					document.getElementById("assemblyButton").onclick="alert('Please choose at least 2 fragments to try an assembly')";
+				}else{
+					document.getElementById("patchButton").onclick = "alert('Only one fragment is required to create patches')";
+				//	document.getElementById("assemblyButton").onclick = Assembly;
+				}
+				presence = true;
+				break;
+			}else{
+				alert("Fragment already choosen");
+				presence = true;
+				break;
 			}
-			else 
-			{
-				alert("vous avez deja selectionner cette donnes dans votre panier");
-			}// afficher l image 
-			test=1 ;
-
+			
 		}
+		presence = false;
 	}
-	if( test === 0)       												 // sinon afficher une alert pas de photo disponible 
-	{
-		alert("pas de photo disponible pour ces données!");
+	
+	if(presence == false){
+		alert("No picture avalaible!");
 	}
 }
+
+function deleteSelection(img){
+	console.log(img);
+	console.log(panier);
+	panier.splice(panier.indexOf(img),1);
+	console.log(panier);
+	document.getElementById(img).remove();
+
+}
+
 
 //--------------------------------------- FILTERING ---------------------------------------//
 
 // Display Dropdown List
 function displayPossibleValues(){
 	let currentAttribut = document.getElementById("attributesMenu").value;
-	let valuesMenu = document.getElementById("valuesMenu");
 	let listPossibleValues = [];
 	let index = attributs.indexOf(currentAttribut);
 	let contain = false;
+	let menu = "";
 
 	// Possible values for each attributes
 	for (let i=0; i<originalValues.length;i++){
@@ -325,9 +323,9 @@ function displayPossibleValues(){
 
 	// Create the values dropdown list
 	for (let n = 0; n < listPossibleValues.length; n++){
-		valuesMenu.innerHTML+=`<option id="${listPossibleValues[n]}" value="${listPossibleValues[n]}">${listPossibleValues[n]}<br>`;
+		menu+=`<option id="${listPossibleValues[n]}" value="${listPossibleValues[n]}">${listPossibleValues[n]}<br>`;
 	}
-
+	document.getElementById("valuesMenu").innerHTML=menu;
 }
 
 // Keep the value in the parameter field and convert it into a logical comparison
@@ -360,9 +358,10 @@ let testFilter = function(s,attribut) {
 
 // Update the filtered fragments array
 function getFilter(){
-	let attribut = document.getElementById("attributesMenu").value;
-	let parametre = document.getElementById("parameter").value;
+	let attribut = document.getElementById("attributesMenu").value;	
 	let value = document.getElementById("valuesMenu").value;
+	let parametre = document.getElementById("parameter").value;
+
 	let updatedList_2 = [];
 	let elemSup ="";
 	
