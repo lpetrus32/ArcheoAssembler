@@ -61,8 +61,8 @@ Référente/Cliente : Ostertag Cécilia
             <!--PICTURES BLOCK-->
              <div class="block" id="PicsBlock">
               <div id="picsDiv" class="files">
-                <label for="">Load your pictures</label><br>
-                <input type="file" id="pics" accept=".jpeg,.jpg,.png" name="pics[]" multiple>
+                <label for="">Load your pictures' folder</label><br>
+                <input type="file" id="pics" accept="image/*" name="pics[]" webkitdirectory multiple>
               </div>
               <form action="my-script.php" enctype="multipart/form-data" method="post">
                 <div><input type="file" onchange="handleFiles(files)" id="upload" multiple name="file"></div>
