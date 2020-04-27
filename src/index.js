@@ -74,8 +74,8 @@ function switchAction(){
 var PicsNamesList = [];
 function picsChosen(oEvent){
 	var oPics = oEvent.target.files;
-	PicsNamesList = []
-	console.log(oPics);
+	PicsNamesList = ["../Data/"+oPics[0].webkitRelativePath.split("/")[0]+"/"]; //relative path
+
 	for(let i = 0; i<oPics.length;i++){
 		PicsNamesList.push(oPics[i].name);
 	}
@@ -235,6 +235,7 @@ function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = 
 	document.getElementById("loading").style.visibility = "hidden";
 }
 
+
 function selectionner(obj)
 {
 	// récup. de tous les INPUT de la TD passée en paramètre
@@ -256,12 +257,12 @@ function afficherselection(imagename){
 												// chercher le motif dans la liste des photos
 												// ajout de l extension et creation du chemain  // il y a un probleme d extension (parfois jpg et d autre JPG) // autre probleme il y a pas que ndefouille dans le nom de l image
 
-	for (i=0 ;i<PicsNamesList.length;i++){
+	for (i=1 ;i<PicsNamesList.length;i++){
 		if (PicsNamesList[i].indexOf(imagename) != -1){		// si on trouve le motif dans un nom d image 
 									
 			if(panier.indexOf(PicsNamesList[i]) == -1){
 				
-				let src ="../Data/Pictures/"+PicsNamesList[i];   				// source de  l image 	
+				let src =PicsNamesList[0]+PicsNamesList[i];   				// source de  l image 	
 				
 				panier.push(PicsNamesList[i]);
 				console.log(panier);
