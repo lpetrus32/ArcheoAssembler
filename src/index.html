@@ -43,8 +43,10 @@ Référente/Cliente : Ostertag Cécilia
 
             <!--TABLE BLOCK-->
             <div class="block" id="DataBlock">
-              <input type="file" id="file" accept=".xml,.ods,.xls,.xlsx"> <!-- accepted files extensions -->
-
+              <div id="fileDiv" class="files">
+                <label for="">Load your data file</label><br>
+                <input type="file" id="file" accept=".xml,.ods,.xls,.xlsx"><br><br> <!-- accepted files extensions -->
+              </div>
               <div id="loading">Downloading ...</div>
               
               <!--Table-->
@@ -58,6 +60,10 @@ Référente/Cliente : Ostertag Cécilia
 
             <!--PICTURES BLOCK-->
              <div class="block" id="PicsBlock">
+              <div id="picsDiv" class="files">
+                <label for="">Load your pictures</label><br>
+                <input type="file" id="pics" accept=".jpeg,.jpg,.png" name="pics[]" multiple>
+              </div>
               <form action="my-script.php" enctype="multipart/form-data" method="post">
                 <div><input type="file" onchange="handleFiles(files)" id="upload" multiple name="file"></div>
                 <div><label for="upload"><span id="preview"></span></label></div>
@@ -66,7 +72,7 @@ Référente/Cliente : Ostertag Cécilia
 
             <!--SELECTION BLOCK-->
             <div class="block" id="selectionBlock">
-              <h5>YOUR SELECTION:</h5>
+              <h3 style="width: 100%; text-align: center;">YOUR SELECTION</h3>
               <div id="insideSelectionBlock"></div>
               <button id="show_hideSelectionButton" onclick="showSelection()"><</button>
               <button id="patchButton" onclick="alert('Please choose 1 fragment to create patches')">CREATE PATCHES</button>
