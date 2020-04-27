@@ -71,6 +71,18 @@ function switchAction(){
 }
 
 //--------------------------------------- CONVERSION FILE -> XML ---------------------------------------//
+var PicsNamesList = [];
+function picsChosen(oEvent){
+	var oPics = oEvent.target.files;
+	PicsNamesList = []
+	console.log(oPics);
+	for(let i = 0; i<oPics.length;i++){
+		PicsNamesList.push(oPics[i].name);
+	}
+	
+	showPics(PicsNamesList,updatedList);
+	document.getElementById("picsDiv").style.visibility="hidden";
+}
 
 // Conversion Function
 function filePicked(oEvent) {
@@ -79,22 +91,19 @@ function filePicked(oEvent) {
 	document.getElementById("insideFiltersBlock").innerHTML="";
 	document.getElementById("parameter").value="";
 
-
 	// Downloading...
 	document.getElementById("loading").style.visibility = "visible";
 	
-	// Get The File From The Input
+	// Get The Files From The Inputs
 	var oFile = oEvent.target.files[0];
 	var sFilename = oFile.name;
-    console.log(sFilename);
-	if(!oFile) {
-		alert("Failed to load file");
-	} else if(/.xml$/.test(sFilename)) { // Check the end of the filename (.xml)
-		document.getElementById("file").style.visibility="hidden";
+
+	if(/.xml$/.test(sFilename)) { // Check the end of the filename (.xml)
+		document.getElementById("fileDiv").style.visibility="hidden";
 		loadXML(oFile);
 
-    } else{
-		document.getElementById("file").style.visibility="hidden";
+	} else{
+		document.getElementById("fileDiv").style.visibility="hidden";
 
 		var reader = new FileReader();
 	
@@ -152,7 +161,7 @@ let loadXML = function loadXML(input) {
 }
 
 // Store attributes and values for each fragment in an array
-let attributs = [], originalValues=[], updatedList = [];
+let attributs = [], originalValues=[], updatedList = [], updatedListBis = [];;
 
 //XML String to Array
 let getMD = function(xdoc) {
@@ -176,7 +185,7 @@ let getMD = function(xdoc) {
 			updatedList.push(valuesList); 
 		}
 	}
-
+	updatedListBis.push(updatedList); 
 	document.getElementById("loading").style.visibility = "visible"; // Downloading...
 	showData(attributs, updatedList);
 
@@ -238,7 +247,7 @@ function selectionner(obj)
 var panier =[]; // variable global des photo choisis qu on va utiliser pour lancer le python 
 function afficherselection(imagename){
 	var maDiv = document.getElementById("insideSelectionBlock");
-	var listeimage=["17-36-4_213 Ostrakon klein.jpg","17-36-4_214 Ostrakon Senet (1).jpg","17-36-4_220 Ostrakon.JPG","17-36-4_242 Ostrakon.JPG","17-36-4_266 Ostrakon.JPG","17-36-4_301 Ostrakon (2).JPG","17-36-4_379 Ostrakon (2).JPG","17-36-4_388 Ostrakon.JPG","17-36-4_410 Ostrakon (1).JPG","17-36-4_423 Ostrakon.JPG","17-36-4_447 Ostrakon Falke (2).JPG","17-36-4_459 Ostrakon (3) Kartusche.JPG","17-36-4_501 Ostrakon.JPG","17-36-4_742 Ostrakon.JPG","17-36-4_819 Ostrakon.JPG","17-36-4_846 Ostrakon.JPG"];								// pour l instant en brute en attendant de generer la liste automatiquement 
+	//var listeimage=["17-36-4_213 Ostrakon klein.jpg","17-36-4_214 Ostrakon Senet (1).jpg","17-36-4_220 Ostrakon.JPG","17-36-4_242 Ostrakon.JPG","17-36-4_266 Ostrakon.JPG","17-36-4_301 Ostrakon (2).JPG","17-36-4_379 Ostrakon (2).JPG","17-36-4_388 Ostrakon.JPG","17-36-4_410 Ostrakon (1).JPG","17-36-4_423 Ostrakon.JPG","17-36-4_447 Ostrakon Falke (2).JPG","17-36-4_459 Ostrakon (3) Kartusche.JPG","17-36-4_501 Ostrakon.JPG","17-36-4_742 Ostrakon.JPG","17-36-4_819 Ostrakon.JPG","17-36-4_846 Ostrakon.JPG"];								// pour l instant en brute en attendant de generer la liste automatiquement 
 	let presence = true;
 
 	imagename=imagename.replace(/\//,'_');
@@ -247,17 +256,17 @@ function afficherselection(imagename){
 												// chercher le motif dans la liste des photos
 												// ajout de l extension et creation du chemain  // il y a un probleme d extension (parfois jpg et d autre JPG) // autre probleme il y a pas que ndefouille dans le nom de l image
 
-	for (i=0 ;i<listeimage.length;i++){
-		if (listeimage[i].indexOf(imagename) != -1){		// si on trouve le motif dans un nom d image 
+	for (i=0 ;i<PicsNamesList.length;i++){
+		if (PicsNamesList[i].indexOf(imagename) != -1){		// si on trouve le motif dans un nom d image 
 									
-			if(panier.indexOf(listeimage[i]) == -1){
-			
-				let src ="../Data/Pictures/"+listeimage[i];   				// source de  l image 	
+			if(panier.indexOf(PicsNamesList[i]) == -1){
 				
-				panier.push(listeimage[i]);
+				let src ="../Data/Pictures/"+PicsNamesList[i];   				// source de  l image 	
+				
+				panier.push(PicsNamesList[i]);
 				console.log(panier);
-				maDiv.innerHTML+=`<div id="${listeimage[i]}" class="selectionBoxes"><img src="${src}" class="photoselectionnee" alt="Loading error"><br><label>${listeimage[i].split(".")[0]}</label></div>`;	// afficher l image 
-				document.getElementById(listeimage[i]).innerHTML+=`<button class="delSelecButton" onclick="deleteSelection('${listeimage[i]}')">X</button>`;
+				maDiv.innerHTML+=`<div id="${PicsNamesList[i]}" class="selectionBoxes"><img src="${src}" class="photoselectionnee" alt="Loading error"><br><label>${PicsNamesList[i].split(".")[0]}</label></div>`;	// afficher l image 
+				document.getElementById(PicsNamesList[i]).innerHTML+=`<button class="delButton" onclick="deleteSelection('${PicsNamesList[i]}')">X</button>`;
 				//gestion des boutons
 				let panierLength = panier.length;
 				if(panierLength == 1){
@@ -288,12 +297,8 @@ function afficherselection(imagename){
 }
 
 function deleteSelection(img){
-	console.log(img);
-	console.log(panier);
 	panier.splice(panier.indexOf(img),1);
-	console.log(panier);
 	document.getElementById(img).remove();
-
 }
 
 
@@ -305,7 +310,7 @@ function displayPossibleValues(){
 	let listPossibleValues = [];
 	let index = attributs.indexOf(currentAttribut);
 	let contain = false;
-	let menu = "";
+	let menu = `<option value="None">Select a value...</option>`;
 
 	// Possible values for each attributes
 	for (let i=0; i<originalValues.length;i++){
@@ -356,12 +361,13 @@ let testFilter = function(s,attribut) {
 	}
 };
 
+NodeList.prototype.indexOf = Array.prototype.indexOf;
+
 // Update the filtered fragments array
 function getFilter(){
-	let attribut = document.getElementById("attributesMenu").value;	
-	let value = document.getElementById("valuesMenu").value;
+	let attribut = document.getElementById("attributesMenu").value;
 	let parametre = document.getElementById("parameter").value;
-
+	let value = document.getElementById("valuesMenu").value;
 	let updatedList_2 = [];
 	let elemSup ="";
 	
@@ -375,48 +381,79 @@ function getFilter(){
 	// Case 1 : filter enter in the parameter field
 	}else if(value=="None" && parametre != ""){
 		let index = attributs.indexOf(attribut);
-		for(let j=0;j<updatedList.length;j++){
-			if(testFilter(parametre,updatedList[j][index])){
-				updatedList_2.push(updatedList[j]);
+		for(let j=0;j<updatedListBis[updatedListBis.length - 1].length;j++){ // MODIF
+			if(testFilter(parametre,updatedListBis[updatedListBis.length - 1][j][index])){ // MODIF
+				updatedList_2.push(updatedListBis[updatedListBis.length - 1][j]); // MODIF
 			}
 		}
-		elemSup = parametre;
+		elemSup = " " + parametre; // MODIF
 	
 	// Case 2 : filter chosen with the value dropdown list
 	}else{
 		let index = attributs.indexOf(attribut);
-		for(let j=0;j<updatedList.length;j++){
-			if(updatedList[j][index]==value){
-				updatedList_2.push(updatedList[j]);
+		for(let j=0;j<updatedListBis[updatedListBis.length - 1].length;j++){ // MODIF
+			if(updatedListBis[updatedListBis.length - 1][j][index]==value){ // MODIF
+				updatedList_2.push(updatedListBis[updatedListBis.length - 1][j]); // MODIF
 			}
 		}
-		elemSup = value;	
+		elemSup = " = " + value; // MODIF
 	}
 
 	// Update the filtered fragments list
 	if (updatedList_2.length != 0) {
-		updatedList = updatedList_2;
+		updatedListBis.push(updatedList_2); // MODIF
 		let insideFiltersBlock = document.getElementById("insideFiltersBlock");
-		let elem = document.createElement("div");
-		elem.setAttribute("id", attribut);
-		let txt = document.createTextNode(elemSup);
-		elem.appendChild(txt);
-		insideFiltersBlock.appendChild(elem);
+		let d = document.createElement("div"); // MODIF
+		d.setAttribute("name", attribut); // MODIF
+		let p = document.createElement("p"); // MODIF
+		p.innerHTML = attribut + elemSup;  // MODIF
+		d.appendChild(p); // MODIF
+		b = document.createElement("button"); // MODIF
+    	b.innerHTML = "x"; // MODIF
+    	b.addEventListener('click', deleteFilter, false); // MODIF
+    	d.appendChild(b); // MODIF
+		insideFiltersBlock.appendChild(d); // MODIF
 
 		document.getElementById("loading").style.visibility = "visible"; // Downloading...
-		showData(attributs, updatedList);
+		showData(attributs, updatedListBis);
 	
 	}else{
 		alert("No results found");
 	}
 };
 
+//function to delete chosen filters
+let deleteFilter = function(e) {
+	let filterList = document.getElementById("insideFiltersBlock").childNodes;
+	let lenFL = filterList.length;
+	let position = filterList.indexOf(e.target.parentNode);
+	let filter = e.target.innerHTML;
+	let index = attributs.indexOf(e.target.parentNode.name);
+	updatedListBis.pop();
+	if (lenFL > 1 && position != lenFL- 1) {
+		for(let i = position; i < lenFL; i++) {
+			let filteredSubList = [];
+			for(let j=0;j<updatedListBis[i-1].length;j++){
+				if(testFilter(filter, updatedListBis[i-1][j][index])) {
+					filteredSubList.push(updatedListBis[i-1][j][index]);
+				}
+			}
+			updatedListBis[i] = filteredSubList;
+		}
+	}
+	e.target.parentNode.remove();
+}
+
 
 //--------------------------------------- SETUP LISTENERS ---------------------------------------//
 
 let setupListeners = function(){
-    let datafile = document.getElementById("file");
+	let datafile = document.getElementById("file");
 	datafile.addEventListener('change', filePicked, false);
+
+	let pics = document.getElementById("pics");
+	pics.addEventListener('change', picsChosen, false);
+
 
 	let attributMenu = document.getElementById("attributesMenu");
 	attributMenu.addEventListener('change', displayPossibleValues, false);
