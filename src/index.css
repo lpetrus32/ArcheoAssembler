@@ -150,6 +150,17 @@ span {
     height: 55%;
     left : 8%;
 }
+#insideFiltersBlock *{
+    display: inline;
+}
+#insideFiltersBlock button { /*boutons crees par getFilter()*/
+    border-radius: 100%;
+    margin-right: 1em;
+}
+#insideFiltersBlock button:hover {
+    background-color: #f44336;
+    color : white;
+}
 #chooseFilter{
     position: absolute;
     top:5%;
@@ -221,9 +232,13 @@ span {
     overflow: hidden;
     border: 1px solid black;
 }
-.delSelecButton{
-    top:2px;
-    right: 2px;
+.delButton{
+    border-radius: 100%;
+    margin-right: 1em;
+}
+.delButton:hover{
+    background-color: #f44336;
+    color : white;
 }
 
 #patchButton{
@@ -268,7 +283,7 @@ span {
     font-family: 'Helvetica Neue', sans-serif;
 }
 
-#file{
+.files{
     position: absolute;
     top : 50%;
     right: 0;
