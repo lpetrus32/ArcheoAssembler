@@ -161,7 +161,7 @@ let loadXML = function loadXML(input) {
 }
 
 // Store attributes and values for each fragment in an array
-let attributs = [], originalValues=[], updatedList = [], updatedListBis = [];;
+let attributs = [], originalValues=[], updatedList = [];
 
 //XML String to Array
 let getMD = function(xdoc) {
@@ -185,7 +185,6 @@ let getMD = function(xdoc) {
 			updatedList.push(valuesList); 
 		}
 	}
-	updatedListBis.push(updatedList); 
 	document.getElementById("loading").style.visibility = "visible"; // Downloading...
 	showData(attributs, updatedList);
 
@@ -382,9 +381,9 @@ function getFilter(){
 	// Case 1 : filter enter in the parameter field
 	}else if(value=="None" && parametre != ""){
 		let index = attributs.indexOf(attribut);
-		for(let j=0;j<updatedListBis[updatedListBis.length - 1].length;j++){ // MODIF
-			if(testFilter(parametre,updatedListBis[updatedListBis.length - 1][j][index])){ // MODIF
-				updatedList_2.push(updatedListBis[updatedListBis.length - 1][j]); // MODIF
+		for(let j=0;j<updatedList.length;j++){
+			if(testFilter(parametre,updatedList[j][index])){
+				updatedList_2.push(updatedList[j]);
 			}
 		}
 		elemSup = " " + parametre; // MODIF
@@ -392,28 +391,28 @@ function getFilter(){
 	// Case 2 : filter chosen with the value dropdown list
 	}else{
 		let index = attributs.indexOf(attribut);
-		for(let j=0;j<updatedListBis[updatedListBis.length - 1].length;j++){ // MODIF
-			if(updatedListBis[updatedListBis.length - 1][j][index]==value){ // MODIF
-				updatedList_2.push(updatedListBis[updatedListBis.length - 1][j]); // MODIF
+		for(let j=0;j<updatedList.length;j++){
+			if(updatedList[j][index]==value){
+				updatedList_2.push(updatedList[j]);
 			}
 		}
-		elemSup = " = " + value; // MODIF
+		elemSup = " = " + value;
 	}
 
 	// Update the filtered fragments list
 	if (updatedList_2.length != 0) {
-		updatedListBis.push(updatedList_2); // MODIF
+		updatedList = updatedList_2;
 		let insideFiltersBlock = document.getElementById("insideFiltersBlock");
-		let d = document.createElement("div"); // MODIF
-		d.setAttribute("name", attribut); // MODIF
-		let p = document.createElement("p"); // MODIF
-		p.innerHTML = attribut + elemSup;  // MODIF
-		d.appendChild(p); // MODIF
-		b = document.createElement("button"); // MODIF
-    	b.innerHTML = "x"; // MODIF
-    	b.addEventListener('click', deleteFilter, false); // MODIF
-    	d.appendChild(b); // MODIF
-		insideFiltersBlock.appendChild(d); // MODIF
+		let d = document.createElement("div");
+		d.setAttribute("name", attribut);
+		let p = document.createElement("p");
+		p.innerHTML = attribut + elemSup;
+		d.appendChild(p);
+		b = document.createElement("button");
+    		b.innerHTML = "x";
+    		b.addEventListener('click', deleteFilter, false);
+    		d.appendChild(b);
+		insideFiltersBlock.appendChild(d);
 
 		document.getElementById("loading").style.visibility = "visible"; // Downloading...
 		showData(attributs, updatedListBis);
@@ -426,20 +425,18 @@ function getFilter(){
 //function to delete chosen filters
 let deleteFilter = function(e) {
 	let filterList = document.getElementById("insideFiltersBlock").childNodes;
-	let lenFL = filterList.length;
-	let position = filterList.indexOf(e.target.parentNode);
-	let filter = e.target.innerHTML;
-	let index = attributs.indexOf(e.target.parentNode.name);
-	updatedListBis.pop();
-	if (lenFL > 1 && position != lenFL- 1) {
-		for(let i = position; i < lenFL; i++) {
-			let filteredSubList = [];
-			for(let j=0;j<updatedListBis[i-1].length;j++){
-				if(testFilter(filter, updatedListBis[i-1][j][index])) {
-					filteredSubList.push(updatedListBis[i-1][j][index]);
+    	let position = filterList.indexOf(e.target.parentNode);
+	updatedList = originalValues;
+	for(let i = 0; i < filterList.length - 1; i++) {
+        	if (i != position) {
+			let updatedList_2 = [];
+            		let index = attributs.indexOf(filterList[i].name);
+	     		for(let j = 0; j < updatedList.length; j++){
+				if(testFilter(filterList[i][0].textContent, updatedList[j][index])) {
+                    			updatedList_2.push(updatedList[j]);
 				}
-			}
-			updatedListBis[i] = filteredSubList;
+            		}
+            	updatedList = updatedList_2;
 		}
 	}
 	e.target.parentNode.remove();
