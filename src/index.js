@@ -430,9 +430,10 @@ let deleteFilter = function(e) {
 	for(let i = 0; i < filterList.length - 1; i++) {
         	if (i != position) {
 			let updatedList_2 = [];
-            		let index = attributs.indexOf(filterList[i].name);
+            		let filter = filterList[i].childNodes[0].textContent;
+            		let index = attributs.indexOf(filterList[i].getAttribute("name"));
 	     		for(let j = 0; j < updatedList.length; j++){
-				if(testFilter(filterList[i][0].textContent, updatedList[j][index])) {
+				if(testFilter(filter, updatedList[j][index])) {
                     			updatedList_2.push(updatedList[j]);
 				}
             		}
