@@ -405,7 +405,7 @@ function getFilter(){
 		let insideFiltersBlock = document.getElementById("insideFiltersBlock");
 		let d = document.createElement("div");
 		d.setAttribute("attribut", attribut);
-		d.setAttribute("filtre", elemSup);
+		d.setAttribute("filter", elemSup);
 		let p = document.createElement("p");
 		p.innerHTML = attribut + elemSup;
 		d.appendChild(p);
