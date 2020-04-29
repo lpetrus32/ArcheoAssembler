@@ -415,7 +415,7 @@ function getFilter(){
 		insideFiltersBlock.appendChild(d);
 
 		document.getElementById("loading").style.visibility = "visible"; // Downloading...
-		showData(attributs, updatedListBis);
+		showData(attributs, updatedList);
 	
 	}else{
 		alert("No results found");
