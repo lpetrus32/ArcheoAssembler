@@ -404,7 +404,8 @@ function getFilter(){
 		updatedList = updatedList_2;
 		let insideFiltersBlock = document.getElementById("insideFiltersBlock");
 		let d = document.createElement("div");
-		d.setAttribute("name", attribut);
+		d.setAttribute("attribut", attribut);
+		d.setAttribute("filtre", elemSup);
 		let p = document.createElement("p");
 		p.innerHTML = attribut + elemSup;
 		d.appendChild(p);
@@ -430,8 +431,8 @@ let deleteFilter = function(e) {
 	for(let i = 0; i < filterList.length - 1; i++) {
         	if (i != position) {
 			let updatedList_2 = [];
-            		let filter = filterList[i].childNodes[0].textContent;
-            		let index = attributs.indexOf(filterList[i].getAttribute("name"));
+			let index = attributs.indexOf(filterList[i].getAttribute("attribut"));
+            		let filter = filterList[i].getAttribute("filter");
 	     		for(let j = 0; j < updatedList.length; j++){
 				if(testFilter(filter, updatedList[j][index])) {
                     			updatedList_2.push(updatedList[j]);
