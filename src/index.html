@@ -48,7 +48,11 @@ Référente/Cliente : Ostertag Cécilia
                 <input type="file" id="file" accept=".xml,.ods,.xls,.xlsx"><br><br> <!-- accepted files extensions -->
               </div>
               <div id="loading">Downloading ...</div>
-              
+              <form id="picsAttribut">
+                <p> Please choose the attribut corresponding to your pictures names</p>
+                <select id="attributesMenu2"><option value="None">Select an attribute...</option></select>
+                <input type="button" onclick="choosePicsAttribut()" value="Apply">
+              </form>
               <!--Table-->
               <table id="table">
                 <thead>
@@ -64,10 +68,12 @@ Référente/Cliente : Ostertag Cécilia
                 <label for="">Load your pictures' folder</label><br>
                 <input type="file" id="pics" accept="image/*" name="pics[]" webkitdirectory multiple>
               </div>
-              <form action="my-script.php" enctype="multipart/form-data" method="post">
+              <!--
+                <form action="my-script.php" enctype="multipart/form-data" method="post">
                 <div><input type="file" onchange="handleFiles(files)" id="upload" multiple name="file"></div>
                 <div><label for="upload"><span id="preview"></span></label></div>
               </form>
+              -->
             </div>
 
             <!--SELECTION BLOCK-->
