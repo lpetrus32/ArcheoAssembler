@@ -195,14 +195,25 @@ let getMD = function(xdoc) {
 		menu+=`<option id="${attributs[a]}" value="${attributs[a]}">${attributs[a]}<br>`;
 	}
 	document.getElementById("attributesMenu").innerHTML=menu;
+	document.getElementById("attributesMenu2").innerHTML=menu;
+
+	//ask for the pictures' attribut
+	document.getElementById("picsAttribut").style.visibility = "visible";
 
 	displayPossibleValues();
-
 }
 
 
 //--------------------------------------- DISPLAYS ---------------------------------------//
+var picsAttribut = [];
 
+//ask for the pictures' attribut
+function choosePicsAttribut(){
+	picsAttribut = [];
+	picsAttribut.push(document.getElementById("attributesMenu2").value);
+	document.getElementById("picsAttribut").style.visibility = "hidden";
+	showData(attributs, updatedList);
+}
 
 // Display Table
 function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = remaining ostraca after filtering process
@@ -216,17 +227,12 @@ function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = 
 		att+=`<th scope="col">${Attr[i]}</th>`; // colnames
 	}
 	Attributs.innerHTML+=att;
+	var IdpicsAttribut = Attr.indexOf(picsAttribut[0]);
 	for (let i = 0; i < filteredOstr.length; i++) {
 		tableau+=`<tr id="ostraca${i}">`; // row creation for each ostracon
 		for (let j = 0; j < filteredOstr[i].length; j++) {
-			if (j === 1 )
-			{
-				tableau+=`<td onclick="selectionner( this)" class ="selectionnee"><input type="hidden"  value="${filteredOstr[i][j]}">${filteredOstr[i][j]}</td>`; // que la colonne des ndefouille cliquable 
-			}
-			else 
-			{	
-				tableau+=`<td>${filteredOstr[i][j]}</td>`; // cell creation with for each value
-			}
+
+			tableau+=`<td onclick="selectionner( this)" class ="selectionnee"><input type="hidden"  value="${filteredOstr[i][IdpicsAttribut]}">${filteredOstr[i][j]}</td>`; // que la colonne des ndefouille cliquable 
 		}
 		tableau+=`</tr>`;
 	}
@@ -235,8 +241,7 @@ function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = 
 }
 
 
-function selectionner(obj)
-{
+function selectionner(obj){
 	// récup. de tous les INPUT de la TD passée en paramètre
   var oInput = obj.getElementsByTagName('input');
   // recuperer la value == ndefouille == imagename 
