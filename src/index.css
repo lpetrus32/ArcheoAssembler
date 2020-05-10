@@ -175,6 +175,7 @@ span {
     bottom: 1%
 }
 
+
 /* Table sub-block */
 #DataBlock{
     position: absolute ;
@@ -193,6 +194,17 @@ span {
     text-align: center;
     background-color: lightslategray;
     visibility:hidden;
+}
+#picsAttribut{
+    position: absolute;
+    background-color: rgb(143, 143, 143, 0.95);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    visibility: hidden;
+    text-align: center;
+    text-justify: auto;
 }
 
 /* Pictures sub-block */
@@ -226,7 +238,6 @@ span {
 .selectionBoxes{
     margin:0 auto;
     float : left;
-    background-color: blue;
     width : 185px; 
     text-align : center;
     overflow: hidden;
