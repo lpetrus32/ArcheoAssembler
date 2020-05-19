@@ -26,12 +26,18 @@ Référente/Cliente : Ostertag Cécilia
 
         <!--MAIN BLOCK-->
         <div id="mainBlock">
-          <button class="button1" id="show_hideFiltersButton" onclick="show_hideAction();">HIDE FILTERS</button>
-          <button class="button1" id="switchButton" onclick="switchAction();">SWITCH</button>  
+          <button class="button1" id="show_hideFiltersButton" onclick="show_hideAction();">
+            <img id="iconeResize" src="../ico/resize1.png"/>
+          </button>
+          <button class="button1" id="switchButton" onclick="switchAction();">FRAGMENTS</button>  
+            
+            <!--FILTERS BLOCK-->
             <div class="block" id="FiltersBlock">
               <button class="button1" id="resetButton" onclick="reset()">Clear</button>
+              <img id="iconeReglages" src="../ico/reglages.png"/>
               <form id="chooseFilter">
-                <select id="attributesMenu"><option value="None">Select an attribute...</option></select> |
+                <select id="attributesMenu"><option value="None">Select an attribute...</option></select>
+                &nbsp; &nbsp; &nbsp;| &nbsp; &nbsp; &nbsp;
                 <select id="valuesMenu"><option value="None">Select a value...</option></select> or
                 <input type="text" id="parameter" placeholder="ex : >120 or == marron">
                 <input type="button" onclick="getFilter()" value="Apply">
@@ -64,6 +70,7 @@ Référente/Cliente : Ostertag Cécilia
 
             <!--PICTURES BLOCK-->
              <div class="block" id="PicsBlock">
+              <div id="loading2">Downloading ...</div>
               <div id="picsDiv" class="files">
                 <label for="">Load your pictures' folder</label><br>
                 <input type="file" id="pics" accept="image/*" name="pics[]" webkitdirectory multiple>
