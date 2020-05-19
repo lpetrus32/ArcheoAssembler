@@ -127,11 +127,11 @@ span {
     margin:0;
     padding: 0;
     position : fixed;
-    top : 18%;
+    top : 20%;
     left : 5%;
     right: 5%;
     width: 90%;
-    height: 75%;
+    height: 73%;
 }
 
 /* Filters sub-block */
@@ -140,15 +140,15 @@ span {
     top : 0;
     left:0;
     right : 0;
-    height: 15%;
+    height: 12%;
 }
 #insideFiltersBlock{
-    background-color: honeydew; /*à retirer*/
     position: absolute;
     bottom: 5%;
     right: 15%;
-    height: 55%;
+    height: auto;
     left : 8%;
+    padding-bottom: 3px;
 }
 #insideFiltersBlock *{
     display: inline;
@@ -174,6 +174,27 @@ span {
     right: 1%;
     bottom: 1%
 }
+#iconeReglages{
+    position: absolute;
+    left: 0%;
+    height: 80%;
+    top: 10%;
+}
+#filterTag{
+    position: relative;
+    width: 30%;
+    left: 3%;
+    bottom: 5%;
+    padding: 0.4%;
+    font-size: 16px;
+    background-color: white;
+    box-shadow: 2px 2px 12px #aaa;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: black;
+    margin-left: 0;
+    margin-right: 10px;
+}
 
 
 /* Table sub-block */
@@ -182,10 +203,10 @@ span {
     bottom : 0;
     left : 0;
     right:0;
-    height: 80%;
+    height: 84%;
     overflow: auto; 	
 }
-#loading{
+#loading, #loading2{
     position: absolute;
     width: 100%;
     top:0;
@@ -216,6 +237,7 @@ span {
     left : 0;
     right: 0;
     height: 80%;
+    overflow: auto;
 }
 
 /* Selection sub-block */
@@ -271,20 +293,34 @@ span {
 
 /* ------------------------------------------------ BUTTONS ---------------------------------------------------*/
 
-
 #resetButton{
     position: absolute;
-    right :0;
-    margin : 0.5%;
+    top: 20%;
+    right: 2%;
     font-family: 'Helvetica Neue', sans-serif;
+    size: 5%;
 }
 
 
 #show_hideFiltersButton{
     position : absolute;
     right : 0;
-    top : -5%;
-    font-family: 'Helvetica Neue', sans-serif;
+    top : -7%;
+    /*font-family: 'Helvetica Neue', sans-serif;*/
+    height: 6%;
+    width: 3%;
+    padding: 0;
+    border-radius: 15%;
+    background-color: transparent;
+}
+
+#iconeResize{
+    position: absolute;
+    top:5%;
+    left:5%;
+    height: 90%;
+    width: 90%;
+    margin: 0;
 }
 
 #switchButton{
