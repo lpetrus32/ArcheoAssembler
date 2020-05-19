@@ -32,16 +32,17 @@ function show_hideAction(){
     let DataBlock = document.getElementById("DataBlock");
     let PicsBlock = document.getElementById("PicsBlock");
     let mainBlockHeight = document.getElementById("mainBlock").clientHeight;
-    let ButtonText = document.getElementById("show_hideFiltersButton");
+    let Button = document.getElementById("show_hideFiltersButton");
 
     let FiltersBlock = document.getElementById("FiltersBlock");
     if(FiltersBlock.clientHeight == 0){
-        ButtonText.textContent = "HIDE FILTERS";
+
+        Button.innerHTML = `<img id="iconeResize" src="../ico/resize1.png"/>`;
         FiltersBlock.style.display = "block";
-        DataBlock.style.height = (mainBlockHeight*0.8)+'px';
-        PicsBlock.style.height = (mainBlockHeight*0.8)+'px';
+        DataBlock.style.height = (mainBlockHeight*0.84)+'px';
+        PicsBlock.style.height = (mainBlockHeight*0.84)+'px';
     }else{
-        ButtonText.textContent = "SHOW FILTERS";
+        Button.innerHTML = `<img id="iconeResize" src="../ico/resize2.png"/>`;
         FiltersBlock.style.display = "none";
         DataBlock.style.height = (mainBlockHeight-6)+'px';
         PicsBlock.style.height = (mainBlockHeight-6)+'px';
@@ -54,6 +55,7 @@ function reset(){
 	document.getElementById("insideFiltersBlock").innerHTML="";
 	document.getElementById("parameter").value="";
 	showData(attributs,updatedList);
+	showPics(updatedList,attributs, PicsNamesList);
 }
 
 // Switch button between Data and pictures
@@ -63,10 +65,12 @@ function switchAction(){
     
     if(DataBlock.clientHeight != 0){
         DataBlock.style.display="none";
-        PicsBlock.style.display="block";
+		PicsBlock.style.display="block";
+		document.getElementById("switchButton").innerText="DATA";
     }else{
         DataBlock.style.display="block";
-        PicsBlock.style.display="none";
+		PicsBlock.style.display="none";
+		document.getElementById("switchButton").innerText="FRAGMENTS";
     }
 }
 
@@ -80,8 +84,9 @@ function picsChosen(oEvent){
 		PicsNamesList.push(oPics[i].name);
 	}
 	
-	showPics(PicsNamesList,updatedList);
+	showPics(updatedList,attributs, PicsNamesList);
 	document.getElementById("picsDiv").style.visibility="hidden";
+	document.getElementById("loading2").style.visibility = "visible"; // Downloading...
 }
 
 // Conversion Function
@@ -205,14 +210,41 @@ let getMD = function(xdoc) {
 
 
 //--------------------------------------- DISPLAYS ---------------------------------------//
-var picsAttribut = [];
+picsAttribut = "";
 
 //ask for the pictures' attribut
 function choosePicsAttribut(){
-	picsAttribut = [];
-	picsAttribut.push(document.getElementById("attributesMenu2").value);
+	picsAttribut=document.getElementById("attributesMenu2").value;
 	document.getElementById("picsAttribut").style.visibility = "hidden";
 	showData(attributs, updatedList);
+}
+
+//return the updated pictures list according to the displayed data
+function currentPicsList(updatedList,attributs, PicsNamesList){
+	var IdpicsAttribut = attributs.indexOf(picsAttribut);
+	var liste = [];
+	let name ="";
+	for(let i = 0; i<updatedList.length;i++){
+		name = updatedList[i][IdpicsAttribut].replace(/\//,'_');
+		for (let j = 1;j<PicsNamesList.length;j++){
+			if(PicsNamesList[j].indexOf(name) != -1){
+				liste.push(PicsNamesList[j]);
+				break;
+			}
+		}
+	}
+	return liste;
+}
+
+//Display images
+function showPics(updatedList,attributs, PicsNamesList){
+	let maDiv = "";
+	var picsList = currentPicsList(updatedList,attributs, PicsNamesList);
+	for (let i=0;i<picsList.length;i++){
+		maDiv+=`<div onclick="selectionner( this)" class="selectionBoxes"><input type="hidden" value="${picsList[i].split(".")[0]}"><img class="photoselectionnee" alt="Loading error" src="../Data/${PicsNamesList[0]}/${picsList[i]}"><br><label>${picsList[i].split(".")[0]}</label></div>`;
+	}
+	document.getElementById("PicsBlock").innerHTML=maDiv;
+	document.getElementById("loading2").style.visibility = "hidden"; // Downloading...
 }
 
 // Display Table
@@ -227,7 +259,7 @@ function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = 
 		att+=`<th scope="col">${Attr[i]}</th>`; // colnames
 	}
 	Attributs.innerHTML+=att;
-	var IdpicsAttribut = Attr.indexOf(picsAttribut[0]);
+	var IdpicsAttribut = Attr.indexOf(picsAttribut);
 	for (let i = 0; i < filteredOstr.length; i++) {
 		tableau+=`<tr id="ostraca${i}">`; // row creation for each ostracon
 		for (let j = 0; j < filteredOstr[i].length; j++) {
@@ -249,10 +281,10 @@ function selectionner(obj){
   afficherselection(imagename);
 }
 
+
 var panier =[]; // variable global des photo choisis qu on va utiliser pour lancer le python 
 function afficherselection(imagename){
 	var maDiv = document.getElementById("insideSelectionBlock");
-	//var listeimage=["17-36-4_213 Ostrakon klein.jpg","17-36-4_214 Ostrakon Senet (1).jpg","17-36-4_220 Ostrakon.JPG","17-36-4_242 Ostrakon.JPG","17-36-4_266 Ostrakon.JPG","17-36-4_301 Ostrakon (2).JPG","17-36-4_379 Ostrakon (2).JPG","17-36-4_388 Ostrakon.JPG","17-36-4_410 Ostrakon (1).JPG","17-36-4_423 Ostrakon.JPG","17-36-4_447 Ostrakon Falke (2).JPG","17-36-4_459 Ostrakon (3) Kartusche.JPG","17-36-4_501 Ostrakon.JPG","17-36-4_742 Ostrakon.JPG","17-36-4_819 Ostrakon.JPG","17-36-4_846 Ostrakon.JPG"];								// pour l instant en brute en attendant de generer la liste automatiquement 
 	let presence = true;
 
 	imagename=imagename.replace(/\//,'_');
@@ -269,7 +301,6 @@ function afficherselection(imagename){
 				let src =PicsNamesList[0]+PicsNamesList[i];   				// source de  l image 	
 				
 				panier.push(PicsNamesList[i]);
-				console.log(panier);
 				maDiv.innerHTML+=`<div id="${PicsNamesList[i]}" class="selectionBoxes"><img src="${src}" class="photoselectionnee" alt="Loading error"><br><label>${PicsNamesList[i].split(".")[0]}</label></div>`;	// afficher l image 
 				document.getElementById(PicsNamesList[i]).innerHTML+=`<button class="delButton" onclick="deleteSelection('${PicsNamesList[i]}')">X</button>`;
 				//gestion des boutons
@@ -378,12 +409,12 @@ function getFilter(){
 	
 	// Errors management
 	if(attribut == "" || (value=="None" && parametre == "")){
-		alert("Missing data");
+		alert("Missing data.");
 
 	}else if(value!="None" && parametre != ""){
-		alert("Please enter only one parameter");
+		alert("Please enter only one parameter.");
 	
-	// Case 1 : filter enter in the parameter field
+	// Case 1 : filter entered in the parameter field
 	}else if(value=="None" && parametre != ""){
 		let index = attributs.indexOf(attribut);
 		for(let j=0;j<updatedList.length;j++){
@@ -401,7 +432,7 @@ function getFilter(){
 				updatedList_2.push(updatedList[j]);
 			}
 		}
-		elemSup = " == " + value;
+		elemSup = " (" + value + ")";
 	}
 
 	// Update the filtered fragments list
@@ -411,6 +442,7 @@ function getFilter(){
 		let d = document.createElement("div");
 		d.setAttribute("attribut", attribut);
 		d.setAttribute("filter", elemSup);
+		d.setAttribute("id", "filterTag");
 		let p = document.createElement("p");
 		p.innerHTML = attribut + elemSup;
 		d.appendChild(p);
@@ -447,6 +479,7 @@ let deleteFilter = function(e) {
 		}
 	}
 	showData(attributs, updatedList);
+	if(PicsNamesList.length > 0){showPics(updatedList,attributs, PicsNamesList);}
 	e.target.parentNode.remove();
 }
 
