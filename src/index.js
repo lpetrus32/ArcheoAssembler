@@ -432,7 +432,7 @@ function getFilter(){
 				updatedList_2.push(updatedList[j]);
 			}
 		}
-		elemSup = " (" + value + ")";
+		elemSup = " == " + value;
 	}
 
 	// Update the filtered fragments list
