@@ -44,8 +44,8 @@ function show_hideAction(){
     }else{
         Button.innerHTML = `<img id="iconeResize" src="../ico/resize2.png"/>`;
         FiltersBlock.style.display = "none";
-        DataBlock.style.height = (mainBlockHeight-6)+'px';
-        PicsBlock.style.height = (mainBlockHeight-6)+'px';
+        DataBlock.style.height = (mainBlockHeight-3)+'px';
+        PicsBlock.style.height = (mainBlockHeight-3)+'px';
     }
 }
 
@@ -54,7 +54,7 @@ function reset(){
 	updatedList = originalValues;
 	document.getElementById("insideFiltersBlock").innerHTML="";
 	document.getElementById("parameter").value="";
-	showData(attributs,updatedList);
+	showData(attributs,updatedList, "s");
 	showPics(updatedList,attributs, PicsNamesList);
 }
 
@@ -74,8 +74,36 @@ function switchAction(){
     }
 }
 
+function editionMode(){
+	let dataBlock = document.getElementById("DataBlock");
+
+	if(document.body.style.backgroundColor=="white"){
+		if(dataBlock.style.display=="none"){
+			switchAction();
+		}
+		document.body.style.backgroundColor="grey";
+		dataBlock.style.borderStyle= "dashed";
+		document.getElementById("switchButton").style.visibility="hidden";
+		document.getElementById("selectionBlock").style.visibility="hidden";
+		document.getElementById("editButtons").style.visibility="visible";
+		showData(attributs, updatedList);
+	}else{
+		document.getElementById("switchButton").style.visibility="visible";
+		document.getElementById("selectionBlock").style.visibility="visible";
+		document.getElementById("editButtons").style.visibility="hidden";
+		document.body.style.backgroundColor="white";
+		document.getElementById("addDataBlock").style.visibility="hidden"; 
+		document.getElementById("table").style.visibility="visible"; 
+		dataBlock.style.borderStyle= "groove";
+		showData(attributs,updatedList, "s");
+		showPics(updatedList,attributs, PicsNamesList);
+	}
+	
+}
+
 //--------------------------------------- CONVERSION FILE -> XML ---------------------------------------//
 var PicsNamesList = [];
+//xmlDoc = "";
 function picsChosen(oEvent){
 	var oPics = oEvent.target.files;
 	PicsNamesList = ["../Data/"+oPics[0].webkitRelativePath.split("/")[0]+"/"]; //relative path
@@ -85,10 +113,9 @@ function picsChosen(oEvent){
 	}
 	
 	showPics(updatedList,attributs, PicsNamesList);
-	document.getElementById("picsDiv").style.visibility="hidden";
-	document.getElementById("loading2").style.visibility = "visible"; // Downloading...
 }
 
+xmlDoc = "";
 // Conversion Function
 function filePicked(oEvent) {
 
@@ -114,44 +141,46 @@ function filePicked(oEvent) {
 	
 		// Read The Event For When A File Gets Selected
 		reader.onload = function(e) {
-		var data = e.target.result;
-		var cfb = XLSX.read(data, {type: 'binary'}); // Conversion
-		
-		// Obtain The Current Row As CSV
-		var csvData = XLS.utils.make_csv(cfb.Sheets[cfb.SheetNames[0]]); // Conversion xls /xlsx / ods to csv 
-		
-		// Conversion CSV -> XML
-		csvData = csvData.split('\n').map(row => row.trim());  
-		let headings = csvData[1].split(',').map(row => row.trim());
-		for (z=0 ;z<headings.length;z++){ // Clean tags
-			for (h=0;h<headings[z].length;h++){
-			headings[z]=headings[z].replace(' ','');
-			headings[z]=headings[z].replace('/','');
-			headings[z]=headings[z].replace("'","");
-			headings[z]=headings[z].replace('°','');
-			headings[z]=headings[z].replace('.','');
-			}
-		}
-		let xmlDoc = '<?xml version="1.0" encoding="UTF-8"?>\n'; // Xml content as a string
-		xmlDoc += "<Artefacts>\n";
-		for(let i = 2; i < csvData.length; i++) {
-			let details = csvData[i].split(',').map(row => row.trim());
-			xmlDoc += "<productData>\n";
-			for(let j = 0; j < headings.length; j++) {
-				if (headings[j] !== ""){    // Condition to solve the table size
-					xmlDoc += `<${headings[j]}>${details[j]}</${headings[j]}>`;
+			var data = e.target.result;
+			var cfb = XLSX.read(data, {type: 'binary'}); // Conversion
+			
+			// Obtain The Current Row As CSV
+			var csvData = XLS.utils.make_csv(cfb.Sheets[cfb.SheetNames[0]]); // Conversion xls /xlsx / ods to csv 
+			
+			// Conversion CSV -> XML
+			csvData = csvData.split('\n').map(row => row.trim());  
+			let headings = csvData[1].split(',').map(row => row.trim());
+			for (z=0 ;z<headings.length;z++){ // Clean tags
+				for (h=0;h<headings[z].length;h++){
+				headings[z]=headings[z].replace(' ','');
+				headings[z]=headings[z].replace('/','');
+				headings[z]=headings[z].replace("'","");
+				headings[z]=headings[z].replace('°','');
+				headings[z]=headings[z].replace('.','');
 				}
 			}
-			xmlDoc += "</productData>\n"; // xml : le fichier xml 
-			}
-			xmlDoc += "</Artefacts>\n";
-			getMD(new DOMParser().parseFromString(xmlDoc,"text/xml"));			
+			xmlDoc = '<?xml version="1.0" encoding="UTF-8"?>\n'; // Xml content as a string
+			xmlDoc += "<Artefacts>\n";
+			for(let i = 2; i < csvData.length; i++) {
+				let details = csvData[i].split(',').map(row => row.trim());
+				xmlDoc += "<productData>\n";
+				for(let j = 0; j < headings.length; j++) {
+					if (headings[j] !== ""){    // Condition to solve the table size
+						xmlDoc += `<${headings[j]}>${details[j]}</${headings[j]}>`;
+					}
+				}
+				xmlDoc += "</productData>\n"; // xml : le fichier xml 
+				}
+				xmlDoc += "</Artefacts>\n";
+				let xml = xmlDoc;
+				getMD(new DOMParser().parseFromString(xml,"text/xml"));			
 		}
 		
 		// Tell JS To Start Reading The File
 		reader.readAsBinaryString(oFile);
 	}
 }
+
 
 //XML File to Object
 let loadXML = function loadXML(input) { 
@@ -166,7 +195,7 @@ let loadXML = function loadXML(input) {
 }
 
 // Store attributes and values for each fragment in an array
-let attributs = [], originalValues=[], updatedList = [];
+attributs = [], originalValues=[], updatedList = [];
 
 //XML String to Array
 let getMD = function(xdoc) {
@@ -191,7 +220,7 @@ let getMD = function(xdoc) {
 		}
 	}
 	document.getElementById("loading").style.visibility = "visible"; // Downloading...
-	showData(attributs, updatedList);
+	showData(attributs, updatedList,"s");
 
 	// Create the attributes dropdown list
 	let AttrLen = attributs.length;
@@ -216,7 +245,7 @@ picsAttribut = "";
 function choosePicsAttribut(){
 	picsAttribut=document.getElementById("attributesMenu2").value;
 	document.getElementById("picsAttribut").style.visibility = "hidden";
-	showData(attributs, updatedList);
+	showData(attributs, updatedList, "s");
 }
 
 //return the updated pictures list according to the displayed data
@@ -244,12 +273,11 @@ function showPics(updatedList,attributs, PicsNamesList){
 		maDiv+=`<div onclick="selectionner( this)" class="selectionBoxes"><input type="hidden" value="${picsList[i].split(".")[0]}"><img class="photoselectionnee" alt="Loading error" src="../Data/${PicsNamesList[0]}/${picsList[i]}"><br><label>${picsList[i].split(".")[0]}</label></div>`;
 	}
 	document.getElementById("PicsBlock").innerHTML=maDiv;
-	document.getElementById("loading2").style.visibility = "hidden"; // Downloading...
 }
 
 // Display Table
-function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = remaining ostraca after filtering process
-	document.getElementById("tableSize").textContent=`Table size = ${filteredOstr.length}`;
+function showData(Attr, updatedList, edition="n"){ // Attr = attributs list, updatedList = remaining ostraca after filtering process
+	document.getElementById("tableSize").textContent=`Table size = ${updatedList.length}`;
 	
 	let TableBody = document.getElementById("tbody");
 	let Attributs = document.getElementById("attributes");
@@ -258,16 +286,36 @@ function showData(Attr, filteredOstr){ // Attr = attributs list, filteredOStr = 
 	for (let i = 0; i < Attr.length; i++) {
 		att+=`<th scope="col">${Attr[i]}</th>`; // colnames
 	}
-	Attributs.innerHTML+=att;
+	Attributs.innerHTML=att;
 	var IdpicsAttribut = Attr.indexOf(picsAttribut);
-	for (let i = 0; i < filteredOstr.length; i++) {
-		tableau+=`<tr id="ostraca${i}">`; // row creation for each ostracon
-		for (let j = 0; j < filteredOstr[i].length; j++) {
+	let choosen = false;
 
-			tableau+=`<td onclick="selectionner( this)" class ="selectionnee"><input type="hidden"  value="${filteredOstr[i][IdpicsAttribut]}">${filteredOstr[i][j]}</td>`; // que la colonne des ndefouille cliquable 
+	for (let i = 0; i < updatedList.length; i++) {
+		for(let k=0; k<panier.length;k++){ //Detect if fragment already choosen to adapt the display
+			if(panier[k].indexOf(updatedList[i][IdpicsAttribut]) != -1){
+				choosen = true;
+				break;
+			}
 		}
+		if(choosen == true){
+			tableau+=`<tr id="ostraca${i}"  style="background-color : lightblue;">`; // row creation for each ostracon
+		}else{tableau+=`<tr id="ostraca${i}">`;}
+		
+		for (let j = 0; j < updatedList[i].length; j++) {
+			if(edition == "s"){
+				tableau+=`<td onclick="selectionner( this)" class ="selectionnee"><input type="hidden"  value="${updatedList[i][IdpicsAttribut]}">${updatedList[i][j]}</td>`; // que la colonne des ndefouille cliquable 
+			}else if(edition == "r"){
+				tableau+=`<td onclick="removeAction( this)" class ="selectionnee"><input type="hidden"  value="${updatedList[i][IdpicsAttribut]}">${updatedList[i][j]}</td>`; // que la colonne des ndefouille cliquable 
+			}else if(edition == "e"){
+				tableau+=`<td onclick="editAction( this)" class ="selectionnee"><input type="hidden"  value="${updatedList[i][IdpicsAttribut]}">${updatedList[i][j]}</td>`; // que la colonne des ndefouille cliquable 
+			}else{
+				tableau+=`<td class ="selectionnee"><input type="hidden"  value="${updatedList[i][IdpicsAttribut]}">${updatedList[i][j]}</td>`; // que la colonne des ndefouille cliquable 
+			}
+		}
+		choosen = false;
 		tableau+=`</tr>`;
 	}
+	//document.getElementsByClassName("selectionnee").onclick="selectionner( this)";
 	TableBody.innerHTML=tableau;
 	document.getElementById("loading").style.visibility = "hidden";
 }
@@ -316,6 +364,8 @@ function afficherselection(imagename){
 				//	document.getElementById("assemblyButton").onclick = Assembly;
 				}
 				presence = true;
+
+				showData(attributs, updatedList, "s");
 				break;
 			}else{
 				alert("Fragment already choosen");
@@ -432,7 +482,7 @@ function getFilter(){
 				updatedList_2.push(updatedList[j]);
 			}
 		}
-		elemSup = " == " + value;
+		elemSup = " (" + value + ")";
 	}
 
 	// Update the filtered fragments list
@@ -441,7 +491,7 @@ function getFilter(){
 		let insideFiltersBlock = document.getElementById("insideFiltersBlock");
 		let d = document.createElement("div");
 		d.setAttribute("attribut", attribut);
-		d.setAttribute("filter", elemSup);
+		d.setAttribute("filter", "== "+ value);
 		d.setAttribute("id", "filterTag");
 		let p = document.createElement("p");
 		p.innerHTML = attribut + elemSup;
@@ -453,7 +503,8 @@ function getFilter(){
 		insideFiltersBlock.appendChild(d);
 
 		document.getElementById("loading").style.visibility = "visible"; // Downloading...
-		showData(attributs, updatedList);
+		showData(attributs, updatedList, "s");
+		if(PicsNamesList.length > 0){showPics(updatedList,attributs, PicsNamesList);}
 	
 	}else{
 		alert("No results found");
@@ -466,23 +517,179 @@ let deleteFilter = function(e) {
     	let position = filterList.indexOf(e.target.parentNode);
 	updatedList = originalValues;
 	for(let i = 0; i < filterList.length; i++) {
-        	if (i != position) {
-			let updatedList_2 = [];
-			let index = attributs.indexOf(filterList[i].getAttribute("attribut"));
-            		let filter = filterList[i].getAttribute("filter");
-	     		for(let j = 0; j < updatedList.length; j++){
+		if (i != position) {
+		let updatedList_2 = [];
+		let index = attributs.indexOf(filterList[i].getAttribute("attribut"));
+				let filter = filterList[i].getAttribute("filter");
+			for(let j = 0; j < updatedList.length; j++){
 				if(testFilter(filter, updatedList[j][index])) {
-                    			updatedList_2.push(updatedList[j]);
+					updatedList_2.push(updatedList[j]);
 				}
-            		}
-            	updatedList = updatedList_2;
+			}
+			updatedList = updatedList_2;
 		}
 	}
-	showData(attributs, updatedList);
+	showData(attributs, updatedList, "s");
 	if(PicsNamesList.length > 0){showPics(updatedList,attributs, PicsNamesList);}
 	e.target.parentNode.remove();
 }
 
+//--------------------------------------- DATA EDITING ---------------------------------------//
+
+function add(){
+	let Block = document.getElementById("addDataBlock"); 
+	Block.innerHTML= "";
+	Block.style.visibility="visible";
+	document.getElementById("table").style.visibility="hidden";
+	for(let i=0;i<attributs.length;i++){
+		Block.innerHTML+=`<div class="addBoxes" style="border : solid;"><p>${attributs[i]}</p><input type="text" id ="add${i}" value="Undefined"></div>`;
+	}
+	Block.innerHTML+=`<input type="button" onclick="addAction()" value="Apply"></input>`;
+}
+function addAction(){	
+	var addValues = [];
+	var test = true;
+
+	for(let i=0;i<attributs.length;i++){
+		addValues.push(document.getElementById(`add${i}`).value);
+	}
+	xmlDoc = xmlDoc.substring(0,xmlDoc.length-13);
+	xmlDoc +="<productData>\n";
+	for(let j = 0; j < attributs.length; j++) {
+		xmlDoc += `<${attributs[j]}>${addValues[j]}</${attributs[j]}>`;
+	}
+	xmlDoc += "</productData>\n";
+	xmlDoc += "</Artefacts>\n";
+
+	//test if picsAttribut already in the original values
+	let index = attributs[0].indexOf(picsAttribut);
+	for(let k=0;k<updatedList.length;k++){
+			if(addValues[index]==updatedList[k][index]){
+				test = false;
+			}
+	}
+
+	if(test = true){
+		originalValues.push(addValues);
+		updatedList=originalValues;
+		document.getElementById("addDataBlock").style.visibility="hidden";
+		showData(attributs, updatedList);
+		document.getElementById("table").style.visibility="visible";
+		if(PicsNamesList.length > 0){showPics(updatedList,attributs, PicsNamesList);}
+		alert("Addition success");
+	}else{
+		alert("The picture's attribut is already choosen, please retry with another one");
+	}
+}
+
+function remove(){
+	showData(attributs, updatedList, "r");
+	//document.getElementsByClassName("selectionnee").onclick="removeAction( this)";
+	document.getElementById("remove").style.color="red";
+}
+function removeAction(obj){
+	var oInput = obj.getElementsByTagName('input');
+	let idName = oInput[0].value;
+	let idx = 0, startIdx = 0,endIdx = 0;
+
+	//remove from xml
+	idx = xmlDoc.search(idName);
+	endIdx = idx + xmlDoc.substring(idx).search("</productData>")+14;
+	for(let i = idx;i<xmlDoc.length;i--){
+		if(xmlDoc.substring(i,i+13) == "<productData>"){
+			startIdx=i-1;
+			break;
+		}
+	}
+	xmlDoc = xmlDoc.substring(0,startIdx)+xmlDoc.substring(endIdx);
+
+	//update values' lists
+
+	for(let j=0;j<originalValues.length;j++){
+		if(originalValues[j].indexOf(idName) != -1){
+			originalValues.splice(j,1);
+			break;
+		}
+	}
+
+	updatedList=originalValues;
+	showData(attributs, updatedList);
+	if(PicsNamesList.length > 0){showPics(updatedList,attributs, PicsNamesList);}
+	alert("Removing success");
+	document.getElementById("remove").style.color="black";
+	document.getElementsByClassName("selectionnee").onclick="";
+}
+
+function edit(){
+	showData(attributs, updatedList, "e");
+	//document.getElementsByClassName("selectionnee").onclick="editAction( this)";
+	document.getElementById("edit").style.color="darkgreen";
+}
+
+function editAction(obj){
+	var oInput = obj.getElementsByTagName('input');
+	let idName = oInput[0].value;
+	let idx = 0, startIdx = 0,endIdx = 0;
+	let line ="";
+
+	//detect line from xml
+	idx = xmlDoc.search(idName);
+	endIdx = idx + xmlDoc.substring(idx).search("</productData>")+14;
+	for(let i = idx;i<xmlDoc.length;i--){
+		if(xmlDoc.substring(i,i+13) == "<productData>"){
+			startIdx=i-1;
+			break;
+		}
+	}
+	line = xmlDoc.substring(startIdx,endIdx);
+
+	//detect values in list
+	for(let j=0;j<originalValues.length;j++){
+		if(originalValues[j].indexOf(idName) != -1){
+			let Block = document.getElementById("addDataBlock"); 
+			Block.innerHTML= "";
+			Block.style.visibility="visible";
+			document.getElementById("table").style.visibility="hidden";
+			for(let k=0;k<attributs.length;k++){
+				Block.innerHTML+=`<div class="addBoxes" style="border : solid;"><p>${attributs[k]}</p><input type="text" id="edit${k}" value="${originalValues[j][k]}"></div>`;
+			}
+			Block.innerHTML+=`<input type="button" onclick="editAction2(${j},${startIdx},${endIdx})" value="Apply"></input>`;
+			break;
+		}
+	}
+}
+
+function editAction2(idx,startIdx,endIdx){
+	var addValues=[];
+
+	//get new values
+	for(let i=0;i<attributs.length;i++){
+		addValues.push(document.getElementById(`edit${i}`).value);
+	}
+
+	//change values in list
+	for(let k = 0;k<originalValues[idx].length;k++){
+		originalValues[idx][k]=addValues[k];
+	}
+	updatedList=originalValues;
+
+	//change line in xml
+	var newline="";
+	newline +="<productData>\n";
+	for(let j = 0; j < attributs.length; j++) {
+		newline += `<${attributs[j]}>${addValues[j]}</${attributs[j]}>`;
+	}
+	newline += "</productData>\n"; 
+	xmlDoc=xmlDoc.substring(0,startIdx)+newline+xmlDoc.substring(endIdx);
+
+	//reload table
+	showData(attributs, updatedList);
+	if(PicsNamesList.length > 0){showPics(updatedList,attributs, PicsNamesList);}
+	alert("Changing success");
+	document.getElementById("addDataBlock").style.visibility="hidden";
+	document.getElementById("table").style.visibility="visible";
+	document.getElementById("edit").style.color="black";
+}
 
 //--------------------------------------- SETUP LISTENERS ---------------------------------------//
 
@@ -492,7 +699,6 @@ let setupListeners = function(){
 
 	let pics = document.getElementById("pics");
 	pics.addEventListener('change', picsChosen, false);
-
 
 	let attributMenu = document.getElementById("attributesMenu");
 	attributMenu.addEventListener('change', displayPossibleValues, false);
