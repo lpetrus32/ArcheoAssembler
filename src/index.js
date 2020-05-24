@@ -74,10 +74,8 @@ function switchAction(){
     }
 }
 
-function editionMode(){
+function editionMode1(){
 	let dataBlock = document.getElementById("DataBlock");
-
-	if(document.body.style.backgroundColor=="white"){
 		if(dataBlock.style.display=="none"){
 			switchAction();
 		}
@@ -87,18 +85,19 @@ function editionMode(){
 		document.getElementById("selectionBlock").style.visibility="hidden";
 		document.getElementById("editButtons").style.visibility="visible";
 		showData(attributs, updatedList);
-	}else{
+		document.getElementById("editModeButton").onclick=editionMode2;
+}
+function editionMode2(){
 		document.getElementById("switchButton").style.visibility="visible";
 		document.getElementById("selectionBlock").style.visibility="visible";
 		document.getElementById("editButtons").style.visibility="hidden";
 		document.body.style.backgroundColor="white";
 		document.getElementById("addDataBlock").style.visibility="hidden"; 
 		document.getElementById("table").style.visibility="visible"; 
-		dataBlock.style.borderStyle= "groove";
+		document.getElementById("DataBlock").style.borderStyle= "groove";
 		showData(attributs,updatedList, "s");
 		showPics(updatedList,attributs, PicsNamesList);
-	}
-	
+		document.getElementById("editModeButton").onclick=editionMode1;
 }
 
 //--------------------------------------- CONVERSION FILE -> XML ---------------------------------------//
