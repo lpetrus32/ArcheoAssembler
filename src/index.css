@@ -61,7 +61,9 @@ footer {
     bottom: 0;
     margin: 0;
     padding-left: 2%;
+    padding-top: 0;
     font-size: 12px;
+    height: 5%;
 }
 /* ------------------------------------------------ HEADER ---------------------------------------------------*/
 
@@ -216,6 +218,13 @@ span {
     background-color: lightslategray;
     visibility:hidden;
 }
+#addDataBlock{  
+    position: absolute;
+    width: 100%;
+    top:0;
+    text-align: center;
+    visibility:hidden;
+}
 #picsAttribut{
     position: absolute;
     background-color: rgb(143, 143, 143, 0.95);
@@ -227,6 +236,13 @@ span {
     text-align: center;
     text-justify: auto;
 }
+.addBoxes{
+    text-align: center;
+    margin:1%;
+    float : left;
+    width : auto; 
+    overflow: hidden;
+}
 
 /* Pictures sub-block */
 #PicsBlock{
@@ -236,7 +252,7 @@ span {
     bottom : 0;
     left : 0;
     right: 0;
-    height: 80%;
+    height: 84%;
     overflow: auto;
 }
 
@@ -353,6 +369,17 @@ select{
     left : 8%;
 }
 
+#editModeButton{
+    position: absolute;
+    bottom: -25px;
+    left:0;
+}
+#editButtons{
+    position: absolute;
+    right : 0;
+    bottom : -25px;
+    width: auto;
+}
 
 
 /* ------------------------------------------------ DATA TABLE ------------------------------------------------*/
