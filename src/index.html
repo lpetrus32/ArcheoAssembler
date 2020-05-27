@@ -30,13 +30,13 @@ Référente/Cliente : Ostertag Cécilia
             <img id="iconeResize" src="../ico/resize1.png"/>
           </button>
           <button class="button1" id="switchButton" onclick="switchAction();">FRAGMENTS</button>  
-          <button id="editModeButton" onclick="editionMode1()">EDITION MODE</button>
+          <button id="editModeButton" onclick="editionMode1()">EDIT MODE</button>
           <div id = "editButtons" style="visibility: hidden;">
-            <button id="add" onclick="add()">ADD DATA</button>
-            <button id="remove" onclick="remove()">REMOVE DATA</button>
+            <input type="file" id="adFile" accept=".xml,.ods,.xls,.xlsx" multiple>&nbsp; or &nbsp;
+            <button id="add" onclick="add()">ADD DATA</button>&nbsp; &nbsp;
+            <button id="remove" onclick="remove()">REMOVE DATA</button>&nbsp; &nbsp;
             <button id="edit" onclick="edit()">EDIT DATA</button>
           </div>
-          <!--<input type="file" id="ajouter des donne " accept=".xml,.ods,.xls,.xlsx"><br><br>-->
             
             <!--FILTERS BLOCK-->
             <div class="block" id="FiltersBlock">
@@ -95,7 +95,7 @@ Référente/Cliente : Ostertag Cécilia
               <button id="assemblyButton" onclick="alert('Please choose at least 2 fragments to try an assembly')">START ASSEMBLY</button>
             </div>
         </div>
-        <!--<input type="file" id="ad" accept=".xml,.ods,.xls,.xlsx" multiple><br><br>-->
+       
 
     <footer>
       <a id="bas"></a>
