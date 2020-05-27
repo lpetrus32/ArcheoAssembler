@@ -313,6 +313,11 @@ span {
 #graph{
     position: absolute;
 }
+#backToMain{
+    position: absolute;
+    right : 5%;
+    top : 16%;
+}
 
 /* ------------------------------------------------ BUTTONS ---------------------------------------------------*/
 
