@@ -47,7 +47,6 @@ function show_hideAction(){
         DataBlock.style.height = (mainBlockHeight-3)+'px';
         PicsBlock.style.height = (mainBlockHeight-3)+'px';
 	}
-	console.log(xmlDoc[0]);
 }
 
 // Reset button
