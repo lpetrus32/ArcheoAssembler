@@ -16,6 +16,7 @@ function showSelection(){
 	selectionBlock.style.transform = `translateX(-${Width}px)`;
 	selectionBlock.style.transitionDuration = "1s";
 	button.onclick = hideSelection;
+
 }
 
 function hideSelection(){
@@ -46,7 +47,8 @@ function show_hideAction(){
         FiltersBlock.style.display = "none";
         DataBlock.style.height = (mainBlockHeight-3)+'px';
         PicsBlock.style.height = (mainBlockHeight-3)+'px';
-    }
+	}
+	console.log(xmlDoc[0]);
 }
 
 // Reset button
@@ -100,9 +102,10 @@ function editionMode2(){
 		document.getElementById("editModeButton").onclick=editionMode1;
 }
 
+
 //--------------------------------------- CONVERSION FILE -> XML ---------------------------------------//
 var PicsNamesList = [];
-//xmlDoc = "";
+
 function picsChosen(oEvent){
 	var oPics = oEvent.target.files;
 	PicsNamesList = ["../Data/"+oPics[0].webkitRelativePath.split("/")[0]+"/"]; //relative path
@@ -114,9 +117,10 @@ function picsChosen(oEvent){
 	showPics(updatedList,attributs, PicsNamesList);
 }
 
-xmlDoc = "";
+xmlDoc = [];
+
 // Conversion Function
-function filePicked(oEvent) {
+function conversion(oEvent) {
 
 	//Reset possible previous parameters
 	document.getElementById("insideFiltersBlock").innerHTML="";
@@ -158,26 +162,29 @@ function filePicked(oEvent) {
 				headings[z]=headings[z].replace('.','');
 				}
 			}
-			xmlDoc = '<?xml version="1.0" encoding="UTF-8"?>\n'; // Xml content as a string
-			xmlDoc += "<Artefacts>\n";
+			xmlDoc[0] = '<?xml version="1.0" encoding="UTF-8"?>\n'; // Xml content as a string
+			xmlDoc[0] += "<Artefacts>\n";
 			for(let i = 2; i < csvData.length; i++) {
 				let details = csvData[i].split(',').map(row => row.trim());
-				xmlDoc += "<productData>\n";
+				xmlDoc[0] += "<productData>\n";
 				for(let j = 0; j < headings.length; j++) {
 					if (headings[j] !== ""){    // Condition to solve the table size
-						xmlDoc += `<${headings[j]}>${details[j]}</${headings[j]}>`;
+						xmlDoc[0] += `<${headings[j]}>${details[j]}</${headings[j]}>`;
 					}
 				}
-				xmlDoc += "</productData>\n"; // xml : le fichier xml 
+				xmlDoc[0] += "</productData>\n"; // xml : le fichier xml 
 				}
-				xmlDoc += "</Artefacts>\n";
-				let xml = xmlDoc;
-				getMD(new DOMParser().parseFromString(xml,"text/xml"));			
+				xmlDoc[0] += "</Artefacts>\n";
+				let xml = xmlDoc[0];
+				getMD(new DOMParser().parseFromString(xml,"text/xml"));		
+					
 		}
 		
 		// Tell JS To Start Reading The File
 		reader.readAsBinaryString(oFile);
 	}
+	//ask for the pictures' attribut
+	document.getElementById("picsAttribut").style.visibility = "visible";
 }
 
 
@@ -186,8 +193,9 @@ let loadXML = function loadXML(input) {
     let reader = new FileReader();
     let content = function(e) { // Waiting for the opening file XML
         let parser = new DOMParser();
-		let xmlDoc = parser.parseFromString(reader.result,"text/xml");
-		getMD(xmlDoc);
+		let xml = parser.parseFromString(reader.result,"text/xml");
+		getMD(xml);
+		xmlDoc[0] = reader.result;
     }
     reader.onload = content;
     reader.readAsText(input);
@@ -229,9 +237,6 @@ let getMD = function(xdoc) {
 	}
 	document.getElementById("attributesMenu").innerHTML=menu;
 	document.getElementById("attributesMenu2").innerHTML=menu;
-
-	//ask for the pictures' attribut
-	document.getElementById("picsAttribut").style.visibility = "visible";
 
 	displayPossibleValues();
 }
@@ -535,6 +540,66 @@ let deleteFilter = function(e) {
 
 //--------------------------------------- DATA EDITING ---------------------------------------//
 
+function adFile(oEvent){
+		// Get The Files From The Inputs
+		var oFile = oEvent.target.files[0];
+		var sFilename = oFile.name;
+		if(/.xml$/.test(sFilename)) { // Check the end of the filename (.xml)
+			let reader = new FileReader();
+			reader.onload = function(){
+				xmlDoc[1] = reader.result.toString();
+				xmlDoc[0] = xmlDoc[0].substring(0,xmlDoc[0].length-13) + xmlDoc[1].substring(xmlDoc[1].search("<productData>"));
+				let xml = xmlDoc[0];
+				getMD(new DOMParser().parseFromString(xml,"text/xml"));	
+			}
+			
+			reader.readAsText(oFile);
+		}else{
+			var reader = new FileReader();
+		
+			// Read The Event For When A File Gets Selected
+			reader.onload = function(e) {
+				var data = e.target.result;
+				var cfb = XLSX.read(data, {type: 'binary'}); // Conversion
+				
+				// Obtain The Current Row As CSV
+				var csvData = XLS.utils.make_csv(cfb.Sheets[cfb.SheetNames[0]]); // Conversion xls /xlsx / ods to csv 
+				
+				// Conversion CSV -> XML
+				csvData = csvData.split('\n').map(row => row.trim());  
+				let headings = csvData[1].split(',').map(row => row.trim());
+				for (z=0 ;z<headings.length;z++){ // Clean tags
+					for (h=0;h<headings[z].length;h++){
+					headings[z]=headings[z].replace(' ','');
+					headings[z]=headings[z].replace('/','');
+					headings[z]=headings[z].replace("'","");
+					headings[z]=headings[z].replace('°','');
+					headings[z]=headings[z].replace('.','');
+					}
+				}
+				xmlDoc[0] = xmlDoc[0].substring(0,xmlDoc[0].length-13);
+				for(let i = 2; i < csvData.length; i++) {
+					let details = csvData[i].split(',').map(row => row.trim());
+					xmlDoc[0] += "<productData>\n";
+					for(let j = 0; j < headings.length; j++) {
+						if (headings[j] !== ""){    // Condition to solve the table size
+							xmlDoc[0] += `<${headings[j]}>${details[j]}</${headings[j]}>`;
+						}
+					}
+					xmlDoc[0] += "</productData>\n"; // xml : le fichier xml 
+					}
+					xmlDoc[0] += "</Artefacts>\n";
+					let xml = xmlDoc[0];
+					getMD(new DOMParser().parseFromString(xml,"text/xml"));	
+			}
+			
+			// Tell JS To Start Reading The File
+			reader.readAsBinaryString(oFile);
+		}
+		
+}
+
+
 function add(){
 	let Block = document.getElementById("addDataBlock"); 
 	Block.innerHTML= "";
@@ -552,19 +617,21 @@ function addAction(){
 	for(let i=0;i<attributs.length;i++){
 		addValues.push(document.getElementById(`add${i}`).value);
 	}
-	xmlDoc = xmlDoc.substring(0,xmlDoc.length-13);
-	xmlDoc +="<productData>\n";
+
+	xmlDoc[0] = xmlDoc[0].substring(0,xmlDoc[0].length-13);
+	xmlDoc[0] +="<productData>\n";
 	for(let j = 0; j < attributs.length; j++) {
-		xmlDoc += `<${attributs[j]}>${addValues[j]}</${attributs[j]}>`;
+		xmlDoc[0] += `<${attributs[j]}>${addValues[j]}</${attributs[j]}>`;
 	}
-	xmlDoc += "</productData>\n";
-	xmlDoc += "</Artefacts>\n";
+	xmlDoc[0] += "</productData>\n";
+	xmlDoc[0] += "</Artefacts>\n";
 
 	//test if picsAttribut already in the original values
 	let index = attributs[0].indexOf(picsAttribut);
 	for(let k=0;k<updatedList.length;k++){
 			if(addValues[index]==updatedList[k][index]){
 				test = false;
+				break;
 			}
 	}
 
@@ -592,18 +659,17 @@ function removeAction(obj){
 	let idx = 0, startIdx = 0,endIdx = 0;
 
 	//remove from xml
-	idx = xmlDoc.search(idName);
-	endIdx = idx + xmlDoc.substring(idx).search("</productData>")+14;
-	for(let i = idx;i<xmlDoc.length;i--){
-		if(xmlDoc.substring(i,i+13) == "<productData>"){
+	idx = xmlDoc[0].search(idName);
+	endIdx = idx + xmlDoc[0].substring(idx).search("</productData>")+14;
+	for(let i = idx;i<xmlDoc[0].length;i--){
+		if(xmlDoc[0].substring(i,i+13) == "<productData>"){
 			startIdx=i-1;
 			break;
 		}
 	}
-	xmlDoc = xmlDoc.substring(0,startIdx)+xmlDoc.substring(endIdx);
+	xmlDoc[0] = xmlDoc[0].substring(0,startIdx)+xmlDoc[0].substring(endIdx);
 
 	//update values' lists
-
 	for(let j=0;j<originalValues.length;j++){
 		if(originalValues[j].indexOf(idName) != -1){
 			originalValues.splice(j,1);
@@ -632,15 +698,15 @@ function editAction(obj){
 	let line ="";
 
 	//detect line from xml
-	idx = xmlDoc.search(idName);
-	endIdx = idx + xmlDoc.substring(idx).search("</productData>")+14;
-	for(let i = idx;i<xmlDoc.length;i--){
-		if(xmlDoc.substring(i,i+13) == "<productData>"){
+	idx = xmlDoc[0].search(idName);
+	endIdx = idx + xmlDoc[0].substring(idx).search("</productData>")+14;
+	for(let i = idx;i<xmlDoc[0].length;i--){
+		if(xmlDoc[0].substring(i,i+13) == "<productData>"){
 			startIdx=i-1;
 			break;
 		}
 	}
-	line = xmlDoc.substring(startIdx,endIdx);
+	line = xmlDoc[0].substring(startIdx,endIdx);
 
 	//detect values in list
 	for(let j=0;j<originalValues.length;j++){
@@ -660,41 +726,60 @@ function editAction(obj){
 
 function editAction2(idx,startIdx,endIdx){
 	var addValues=[];
+	var test = true;
 
 	//get new values
 	for(let i=0;i<attributs.length;i++){
 		addValues.push(document.getElementById(`edit${i}`).value);
 	}
 
-	//change values in list
-	for(let k = 0;k<originalValues[idx].length;k++){
-		originalValues[idx][k]=addValues[k];
+	//test if picsAttribut already in the original values
+	let index = attributs[0].indexOf(picsAttribut);
+	for(let k=0;k<updatedList.length;k++){
+			if(addValues[index]==updatedList[k][index]){
+				test = false;
+				break;
+			}
 	}
-	updatedList=originalValues;
 
-	//change line in xml
-	var newline="";
-	newline +="<productData>\n";
-	for(let j = 0; j < attributs.length; j++) {
-		newline += `<${attributs[j]}>${addValues[j]}</${attributs[j]}>`;
+	if(test == true){
+		//change values in list
+		for(let k = 0;k<originalValues[idx].length;k++){
+			originalValues[idx][k]=addValues[k];
+		}
+		updatedList=originalValues;
+
+		//change line in xml
+		var newline="";
+		newline +="<productData>\n";
+		for(let j = 0; j < attributs.length; j++) {
+			newline += `<${attributs[j]}>${addValues[j]}</${attributs[j]}>`;
+		}
+		newline += "</productData>\n"; 
+		xmlDoc[0]=xmlDoc[0].substring(0,startIdx)+newline+xmlDoc[0].substring(endIdx);
+
+		//reload table
+		showData(attributs, updatedList);
+		if(PicsNamesList.length > 0){showPics(updatedList,attributs, PicsNamesList);}
+		alert("Changing success");
+		document.getElementById("addDataBlock").style.visibility="hidden";
+		document.getElementById("table").style.visibility="visible";
+		document.getElementById("edit").style.color="black";
+	}else{
+		alert("The picture's attribut is already choosen, please retry with another one");
+		document.getElementById(`edit${index}`).value="";
 	}
-	newline += "</productData>\n"; 
-	xmlDoc=xmlDoc.substring(0,startIdx)+newline+xmlDoc.substring(endIdx);
-
-	//reload table
-	showData(attributs, updatedList);
-	if(PicsNamesList.length > 0){showPics(updatedList,attributs, PicsNamesList);}
-	alert("Changing success");
-	document.getElementById("addDataBlock").style.visibility="hidden";
-	document.getElementById("table").style.visibility="visible";
-	document.getElementById("edit").style.color="black";
 }
+
 
 //--------------------------------------- SETUP LISTENERS ---------------------------------------//
 
 let setupListeners = function(){
 	let datafile = document.getElementById("file");
-	datafile.addEventListener('change', filePicked, false);
+	datafile.addEventListener('change', conversion, false);
+
+	let addData = document.getElementById("adFile");
+	addData.addEventListener('change', adFile, false);
 
 	let pics = document.getElementById("pics");
 	pics.addEventListener('change', picsChosen, false);
