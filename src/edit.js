@@ -74,7 +74,7 @@ function add(){
     for(let i=0;i<attributs.length;i++){
         Block.innerHTML+=`<div class="addBoxes" style="border : solid;"><p>${attributs[i]}</p><input type="text" id ="add${i}" value="Undefined"></div>`;
     }
-    Block.innerHTML+=`<input type="button" onclick="addAction()" value="Apply"></input>`;
+    Block.innerHTML+=`<input type="button" onclick="addAction()" value="Apply" style="position:absolute;bottom:-15px;left:5px;"></input>`;
 }
 function addAction(){	
     var addValues = [];
@@ -153,7 +153,6 @@ function removeAction(obj){
 
 function edit(){
     showData(attributs, updatedList, "e");
-    //document.getElementsByClassName("selectionnee").onclick="editAction( this)";
     document.getElementById("edit").style.color="darkgreen";
     }
 
@@ -182,9 +181,13 @@ function edit(){
             Block.style.visibility="visible";
             document.getElementById("table").style.visibility="hidden";
             for(let k=0;k<attributs.length;k++){
-                Block.innerHTML+=`<div class="addBoxes" style="border : solid;"><p>${attributs[k]}</p><input type="text" id="edit${k}" value="${originalValues[j][k]}"></div>`;
+                if(attributs[k]==picsAttribut){
+                    Block.innerHTML+=`<div class="addBoxes" style="border : solid;"><p>${attributs[k]}</p><p id="edit${k}" value="${originalValues[j][k]}">${originalValues[j][k]}</p></div>`;
+                }else{
+                    Block.innerHTML+=`<div class="addBoxes" style="border : solid;"><p>${attributs[k]}</p><input type="text" id="edit${k}" value="${originalValues[j][k]}"></div>`;
+                }
             }
-            Block.innerHTML+=`<input type="button" onclick="editAction2(${j},${startIdx},${endIdx})" value="Apply"></input>`;
+            Block.innerHTML+=`<input type="button" onclick="editAction2(${j},${startIdx},${endIdx})" value="Apply" style="position:absolute;bottom:-15px;left:5px;"></input>`;
             break;
         }
     }
