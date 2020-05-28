@@ -98,4 +98,5 @@ function editionMode2(){
 		showData(attributs,updatedList, "s");
 		showPics(updatedList,attributs, PicsNamesList);
 		document.getElementById("editModeButton").onclick=editionMode1;
+		document.getElementById("edit").style.color="black";
 }
