@@ -12,6 +12,7 @@ picsAttribut = "";
 function choosePicsAttribut(){
 	picsAttribut=document.getElementById("attributesMenu2").value;
 	document.getElementById("picsAttribut").style.visibility = "hidden";
+	showData(attributs, updatedList, "s");
 }
 
 //return the updated pictures list according to the displayed data
@@ -56,15 +57,16 @@ function showData(Attr, updatedList, edition="n"){ // Attr = attributs list, upd
 	var IdpicsAttribut = Attr.indexOf(picsAttribut);
 	let choosen = false;
 
+
 	for (let i = 0; i < updatedList.length; i++) {
 		for(let k=0; k<panier.length;k++){ //Detect if fragment already choosen to adapt the display
-			if(panier[k].indexOf(updatedList[i][IdpicsAttribut]) != -1){
+			if(panier[k].indexOf(updatedList[i][IdpicsAttribut].replace(/\//,'_')) != -1){
 				choosen = true;
 				break;
 			}
 		}
 		if(choosen == true){
-			tableau+=`<tr id="ostraca${i}"  style="background-color : lightblue;">`; // row creation for each ostracon
+			tableau+=`<tr id="ostraca${i}"  style="background-color : darkgrey;">`; // row creation for each ostracon
 		}else{tableau+=`<tr id="ostraca${i}">`;}
 		
 		for (let j = 0; j < updatedList[i].length; j++) {
@@ -81,7 +83,7 @@ function showData(Attr, updatedList, edition="n"){ // Attr = attributs list, upd
 		choosen = false;
 		tableau+=`</tr>`;
 	}
-	//document.getElementsByClassName("selectionnee").onclick="selectionner( this)";
+	console.log(picsAttribut);
 	TableBody.innerHTML=tableau;
 	document.getElementById("loading").style.visibility = "hidden";
 }
@@ -90,9 +92,11 @@ function showData(Attr, updatedList, edition="n"){ // Attr = attributs list, upd
 function selectionner(obj){
 	// récup. de tous les INPUT de la TD passée en paramètre
   var oInput = obj.getElementsByTagName('input');
+  
   // recuperer la value == ndefouille == imagename 
   imagename = oInput[0].value;
   afficherselection(imagename);
+  
 }
 
 
@@ -119,17 +123,6 @@ function afficherselection(imagename){
 				maDiv.innerHTML+=`<div id="${PicsNamesList[i]}" class="selectionBoxes"><img src="${src}" class="photoselectionnee" alt="Loading error"><br><label>${PicsNamesList[i].split(".")[0]}</label></div>`;	// afficher l image 
 				document.getElementById(PicsNamesList[i]).innerHTML+=`<button class="delButton" onclick="deleteSelection('${PicsNamesList[i]}')">X</button>`;
 				//gestion des boutons
-				let panierLength = panier.length;
-				if(panierLength == 1){
-					//document.getElementById("patchButton").onclick = CreatePatchs;
-					document.getElementById("assemblyButton").onclick="alert('Please choose at least 2 fragments to try an assembly')";
-				}else if(panierLength == 0 ){
-					document.getElementById("patchButton").onclick = "alert('Please choose 1 fragment to create patches')";
-					document.getElementById("assemblyButton").onclick="alert('Please choose at least 2 fragments to try an assembly')";
-				}else{
-					document.getElementById("patchButton").onclick = "alert('Only one fragment is required to create patches')";
-				//	document.getElementById("assemblyButton").onclick = Assembly;
-				}
 				presence = true;
 
 				showData(attributs, updatedList, "s");
@@ -152,4 +145,5 @@ function afficherselection(imagename){
 function deleteSelection(img){
 	panier.splice(panier.indexOf(img),1);
 	document.getElementById(img).remove();
+	showData(attributs, updatedList, "s");
 }
