@@ -28,9 +28,6 @@ function conversion(oEvent) {
 	document.getElementById("insideFiltersBlock").innerHTML="";
 	document.getElementById("parameter").value="";
 
-	// Downloading...
-	document.getElementById("loading").style.visibility = "visible";
-	
 	// Get The Files From The Inputs
 	var oFile = oEvent.target.files[0];
 	var sFilename = oFile.name;
@@ -128,7 +125,6 @@ let getMD = function(xdoc) {
 			updatedList.push(valuesList); 
 		}
 	}
-	document.getElementById("loading").style.visibility = "visible"; // Downloading...
 	showData(attributs, updatedList,"s");
 
 	// Create the attributes dropdown list
