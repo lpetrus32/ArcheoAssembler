@@ -3,7 +3,7 @@ ArcheoAssembler. Project
 M1 BioInformatique
 Projet de programmation
 Référente/Cliente : Ostertag Cécilia
-File 3/5 - DISPLAYS + SELECTION
+JS FILE 3/5 - DISPLAYS + SELECTION
 */
 
 picsAttribut = "";
@@ -49,7 +49,7 @@ function showData(Attr, updatedList, edition="n"){ // Attr = attributs list, upd
 	let TableBody = document.getElementById("tbody");
 	let Attributs = document.getElementById("attributes");
 	let att="";
-	let tableau="";   // chaine de caractere du tableau 
+	let tableau="";
 	for (let i = 0; i < Attr.length; i++) {
 		att+=`<th scope="col">${Attr[i]}</th>`; // colnames
 	}
@@ -65,59 +65,51 @@ function showData(Attr, updatedList, edition="n"){ // Attr = attributs list, upd
 				break;
 			}
 		}
-		if(choosen == true){
+		if(choosen == true){ //if fragment already selected, the line will be grey
 			tableau+=`<tr id="ostraca${i}"  style="background-color : darkgrey;">`; // row creation for each ostracon
 		}else{tableau+=`<tr id="ostraca${i}">`;}
 		
 		for (let j = 0; j < updatedList[i].length; j++) {
-			if(edition == "s"){
+			if(edition == "s"){ //selection mode
 				tableau+=`<td onclick="selectionner( this)" class ="selectionnee"><input type="hidden"  value="${updatedList[i][IdpicsAttribut]}">${updatedList[i][j]}</td>`; // que la colonne des ndefouille cliquable 
-			}else if(edition == "r"){
+			}else if(edition == "r"){ //deletion mode
 				tableau+=`<td onclick="removeAction( this)" class ="selectionnee"><input type="hidden"  value="${updatedList[i][IdpicsAttribut]}">${updatedList[i][j]}</td>`; // que la colonne des ndefouille cliquable 
-			}else if(edition == "e"){
+			}else if(edition == "e"){ //edit mode
 				tableau+=`<td onclick="editAction( this)" class ="selectionnee"><input type="hidden"  value="${updatedList[i][IdpicsAttribut]}">${updatedList[i][j]}</td>`; // que la colonne des ndefouille cliquable 
-			}else{
+			}else{ //no mode
 				tableau+=`<td class ="selectionnee"><input type="hidden"  value="${updatedList[i][IdpicsAttribut]}">${updatedList[i][j]}</td>`; // que la colonne des ndefouille cliquable 
 			}
 		}
 		choosen = false;
 		tableau+=`</tr>`;
 	}
-	console.log(picsAttribut);
 	TableBody.innerHTML=tableau;
 	document.getElementById("loading").style.visibility = "hidden";
 }
 
-
+//selection function, get the id of a line
 function selectionner(obj){
-	// récup. de tous les INPUT de la TD passée en paramètre
   var oInput = obj.getElementsByTagName('input');
   
-  // recuperer la value == ndefouille == imagename 
   imagename = oInput[0].value;
   afficherselection(imagename);
-  
 }
 
 
-var panier =[]; // variable global des photo choisis qu on va utiliser pour lancer le python 
+var panier =[];
 
+//if image not already selected, add it to the selection block
 function afficherselection(imagename){
 	var maDiv = document.getElementById("insideSelectionBlock");
 	let presence = true;
 
-	imagename=imagename.replace(/\//,'_');
-	
-												// regler le probleme des (/) dans les nde fouille 
-												// chercher le motif dans la liste des photos
-												// ajout de l extension et creation du chemain  // il y a un probleme d extension (parfois jpg et d autre JPG) // autre probleme il y a pas que ndefouille dans le nom de l image
+	imagename=imagename.replace(/\//,'_'); //normalize the image name
 
 	for (i=1 ;i<PicsNamesList.length;i++){
-		if (PicsNamesList[i].indexOf(imagename) != -1){		// si on trouve le motif dans un nom d image 
-									
+		if (PicsNamesList[i].indexOf(imagename) != -1){				
 			if(panier.indexOf(PicsNamesList[i]) == -1){
 				
-				let src =PicsNamesList[0]+PicsNamesList[i];   				// source de  l image 	
+				let src =PicsNamesList[0]+PicsNamesList[i];	
 				
 				panier.push(PicsNamesList[i]);
 				maDiv.innerHTML+=`<div id="${PicsNamesList[i]}" class="selectionBoxes"><img src="${src}" class="photoselectionnee" alt="Loading error"><br><label>${PicsNamesList[i].split(".")[0]}</label></div>`;	// afficher l image 
@@ -132,17 +124,17 @@ function afficherselection(imagename){
 				presence = true;
 				break;
 			}
-			
 		}
 		presence = false;
 	}
-	
+
 	if(presence == false){
 		alert("No picture avalaible!");
 	}
 }
 
-function deleteSelection(img){
+//remove the image from the selection block and panier[]
+function deleteSelection(img){ 
 	panier.splice(panier.indexOf(img),1);
 	document.getElementById(img).remove();
 	showData(attributs, updatedList, "s");
