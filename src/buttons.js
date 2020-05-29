@@ -66,7 +66,7 @@ function switchAction(){
     if(DataBlock.clientHeight != 0){
         DataBlock.style.display="none";
 		PicsBlock.style.display="block";
-		document.getElementById("switchButton").innerText="DATA";
+		document.getElementById("switchButton").innerText="&nbsp;DATA&nbsp;";
     }else{
         DataBlock.style.display="block";
 		PicsBlock.style.display="none";
