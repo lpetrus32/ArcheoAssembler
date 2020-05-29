@@ -3,7 +3,7 @@ ArcheoAssembler. Project
 M1 BioInformatique
 Projet de programmation
 Référente/Cliente : Ostertag Cécilia
-File 5/5 - DATA EDITING
+JS FILE 5/5 - DATA EDITING
 */
 
 function adFile(oEvent){
@@ -20,7 +20,7 @@ function adFile(oEvent){
         }
         
         reader.readAsText(oFile);
-    }else{
+    } else{
         var reader = new FileReader();
     
         // Read The Event For When A File Gets Selected
@@ -52,7 +52,7 @@ function adFile(oEvent){
                         xmlDoc[0] += `<${headings[j]}>${details[j]}</${headings[j]}>`;
                     }
                 }
-                xmlDoc[0] += "</productData>\n"; // xml : le fichier xml 
+                xmlDoc[0] += "</productData>\n";
                 }
                 xmlDoc[0] += "</Artefacts>\n";
                 let xml = xmlDoc[0];
@@ -92,7 +92,7 @@ function addAction(){
     xmlDoc[0] += "</productData>\n";
     xmlDoc[0] += "</Artefacts>\n";
 
-    //test if picsAttribut already in the original values
+    // Test if picsAttribut is already in the original values
     let index = attributs[0].indexOf(picsAttribut);
     for(let k=0;k<updatedList.length;k++){
             if(addValues[index]==updatedList[k][index]){
@@ -116,7 +116,6 @@ function addAction(){
 
 function remove(){
     showData(attributs, updatedList, "r");
-    //document.getElementsByClassName("selectionnee").onclick="removeAction( this)";
     document.getElementById("remove").style.color="red";
 }
 function removeAction(obj){
@@ -124,7 +123,7 @@ function removeAction(obj){
     let idName = oInput[0].value;
     let idx = 0, startIdx = 0,endIdx = 0;
 
-    //remove from xml
+    // Remove from xml
     idx = xmlDoc[0].search(idName);
     endIdx = idx + xmlDoc[0].substring(idx).search("</productData>")+14;
     for(let i = idx;i<xmlDoc[0].length;i--){
@@ -135,7 +134,7 @@ function removeAction(obj){
     }
     xmlDoc[0] = xmlDoc[0].substring(0,startIdx)+xmlDoc[0].substring(endIdx);
 
-    //update values' lists
+    // Update values'lists
     for(let j=0;j<originalValues.length;j++){
         if(originalValues[j].indexOf(idName) != -1){
             originalValues.splice(j,1);
@@ -162,7 +161,7 @@ function edit(){
     let idx = 0, startIdx = 0,endIdx = 0;
     let line ="";
 
-    //detect line from xml
+    // Detect line from xml
     idx = xmlDoc[0].search(idName);
     endIdx = idx + xmlDoc[0].substring(idx).search("</productData>")+14;
     for(let i = idx;i<xmlDoc[0].length;i--){
@@ -173,7 +172,7 @@ function edit(){
     }
     line = xmlDoc[0].substring(startIdx,endIdx);
 
-    //detect values in list
+    // Detect values in list
     for(let j=0;j<originalValues.length;j++){
         if(originalValues[j].indexOf(idName) != -1){
             let Block = document.getElementById("addDataBlock"); 
@@ -196,18 +195,18 @@ function edit(){
 function editAction2(idx,startIdx,endIdx){
     var addValues=[];
 
-    //get new values
+    // Get new values
     for(let i=0;i<attributs.length;i++){
         addValues.push(document.getElementById(`edit${i}`).value);
     }
 
-    //change values in list
+    // Change values in list
     for(let k = 0;k<originalValues[idx].length;k++){
         originalValues[idx][k]=addValues[k];
     }
     updatedList=originalValues;
 
-    //change line in xml
+    // Change line in xml
     var newline="";
     newline +="<productData>\n";
     for(let j = 0; j < attributs.length; j++) {
@@ -216,7 +215,7 @@ function editAction2(idx,startIdx,endIdx){
     newline += "</productData>\n"; 
     xmlDoc[0]=xmlDoc[0].substring(0,startIdx)+newline+xmlDoc[0].substring(endIdx);
 
-    //reload table
+    // Reload table
     showData(attributs, updatedList);
     if(PicsNamesList.length > 0){showPics(updatedList,attributs, PicsNamesList);}
     alert("Changing success");
