@@ -3,6 +3,7 @@ ArcheoAssembler. Project
 M1 BioInformatique
 Projet de programmation
 Référente/Cliente : Ostertag Cécilia
+CSS FILE
 */
 
 html, body {
@@ -135,6 +136,17 @@ span {
     width: 90%;
     height: 73%;
 }
+#tutoMainBlock{
+    margin:0;
+    padding: 0;
+    position : fixed;
+    top : 20%;
+    left : 5%;
+    right: 5%;
+    width: 90%;
+    height: 73%;
+    overflow: auto;
+} 
 
 /* Filters sub-block */
 #FiltersBlock{
@@ -155,7 +167,7 @@ span {
 #insideFiltersBlock *{
     display: inline;
 }
-#insideFiltersBlock button { /*boutons crees par getFilter()*/
+#insideFiltersBlock button {
     border-radius: 100%;
     margin-right: 1em;
 }
@@ -238,7 +250,9 @@ span {
 }
 .addBoxes{
     text-align: center;
-    margin:1%;
+    margin-right :2px;
+    margin-left :2px;
+    margin-bottom: 1%;
     float : left;
     width : auto; 
     overflow: hidden;
@@ -334,7 +348,6 @@ span {
     position : absolute;
     right : 0;
     top : -7%;
-    /*font-family: 'Helvetica Neue', sans-serif;*/
     height: 6%;
     width: 3%;
     padding: 0;
@@ -443,7 +456,7 @@ tr:hover{
 
 /* ------------------------------------------------ OTHERS ------------------------------------------------*/
 
-.selectionnee  					 /*pour le curseur sur les cellule ndefouille*/
+.selectionnee  					
 {
 	 cursor: pointer;
 }
@@ -454,7 +467,17 @@ tr:hover{
 .selectionnee:active{
     background-color: rgb(98, 98, 230);
 }
-.photoselectionnee 				/*pour la taille des image dans le panier*/
+.photoselectionnee 			
 {
 		height: 150px;
+}
+
+.tutoImg{
+    width: 65%;
+    border: 1px solid black;
+}
+.tutoImg:hover{
+    position: relative;
+    left : 6%;
+    width: 88%;
 }
