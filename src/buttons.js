@@ -70,7 +70,7 @@ function switchAction(){
     }else{
         DataBlock.style.display="block";
 		PicsBlock.style.display="none";
-		document.getElementById("switchButton").innerText="FRAGMENTS";
+		document.getElementById("switchButton").innerText="PICTURES";
     }
 }
 
