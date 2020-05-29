@@ -3,7 +3,7 @@ ArcheoAssembler. Project
 M1 BioInformatique
 Projet de programmation
 Référente/Cliente : Ostertag Cécilia
-FIle 4/5 - FILTERING
+JS FILE 4/5 - FILTERING
 */
 
 // Display Dropdown List
@@ -127,7 +127,7 @@ function getFilter(){
 	}
 };
 
-//function to delete chosen filters
+// Delete chosen filters
 let deleteFilter = function(e) {
 	let filterList = document.getElementById("insideFiltersBlock").childNodes;
     	let position = filterList.indexOf(e.target.parentNode);
