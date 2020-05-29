@@ -3,11 +3,12 @@ ArcheoAssembler. Project
 M1 BioInformatique
 Projet de programmation
 Référente/Cliente : Ostertag Cécilia
-File 2/5 - CONVERSIONS + SETUP LISTENERS
+JS FILE 2/5 - CONVERSIONS + SETUP LISTENERS
 */
 
 var PicsNamesList = [];
 
+//get the names of all images from the folder
 function picsChosen(oEvent){
 	var oPics = oEvent.target.files;
 	PicsNamesList = ["../Data/"+oPics[0].webkitRelativePath.split("/")[0]+"/"]; //relative path
@@ -15,11 +16,11 @@ function picsChosen(oEvent){
 	for(let i = 0; i<oPics.length;i++){
 		PicsNamesList.push(oPics[i].name);
 	}
-	
+
 	showPics(updatedList,attributs, PicsNamesList);
 }
 
-xmlDoc = [];
+xmlDoc = []; //xmlDoc[0] = xml string, xmlDoc[1] = additional xml string
 
 // Conversion Function
 function conversion(oEvent) {
@@ -61,7 +62,9 @@ function conversion(oEvent) {
 				headings[z]=headings[z].replace('.','');
 				}
 			}
-			xmlDoc[0] = '<?xml version="1.0" encoding="UTF-8"?>\n'; // Xml content as a string
+
+			//create de xml variable
+			xmlDoc[0] = '<?xml version="1.0" encoding="UTF-8"?>\n';
 			xmlDoc[0] += "<Artefacts>\n";
 			for(let i = 2; i < csvData.length; i++) {
 				let details = csvData[i].split(',').map(row => row.trim());
@@ -71,7 +74,7 @@ function conversion(oEvent) {
 						xmlDoc[0] += `<${headings[j]}>${details[j]}</${headings[j]}>`;
 					}
 				}
-				xmlDoc[0] += "</productData>\n"; // xml : le fichier xml 
+				xmlDoc[0] += "</productData>\n";
 				}
 				xmlDoc[0] += "</Artefacts>\n";
 				let xml = xmlDoc[0];
@@ -103,7 +106,7 @@ let loadXML = function loadXML(input) {
 // Store attributes and values for each fragment in an array
 attributs = [], originalValues=[], updatedList = [];
 
-//XML String to Array
+//XML String to Arrays
 let getMD = function(xdoc) {
 	attributs = [];
 	originalValues=[];
@@ -113,8 +116,8 @@ let getMD = function(xdoc) {
     for (let i = 1; i < objectsList.length - 1; i++) {
         if (objectsList[i].nodeType === 1) { // Check if the node match a fragment 
 			let mdList = objectsList[i].childNodes; // Attributes nodes
+			let valuesList = [];
 			
-            let valuesList = [];
             for (let j = 1; j < mdList.length - 1; j++) {
                 if (i === 1) {
 					attributs.push(mdList[j].nodeName);
