@@ -3,10 +3,10 @@ ArcheoAssembler. Project
 M1 BioInformatique
 Projet de programmation
 Référente/Cliente : Ostertag Cécilia
-file 1/5 - BUTTONS
+JS FILE 1/5 - BUTTONS
 */
 
-// Button show_hideSelection
+// Show/hide the selection block which contains choosen ostraca
 function showSelection(){
 	let selectionBlock = document.getElementById("selectionBlock");
 	let button = document.getElementById("show_hideSelectionButton");
@@ -27,7 +27,7 @@ function hideSelection(){
 	button.onclick = showSelection;
 }
 
-// Button show_hideFiltersButton
+// Show/hide the filter block which contains parameters to filter
 function show_hideAction(){
     let DataBlock = document.getElementById("DataBlock");
     let PicsBlock = document.getElementById("PicsBlock");
@@ -49,7 +49,7 @@ function show_hideAction(){
 	}
 }
 
-// Reset button
+// Reset button : remove all filters already applied
 function reset(){
 	updatedList = originalValues;
 	document.getElementById("insideFiltersBlock").innerHTML="";
@@ -58,7 +58,7 @@ function reset(){
 	showPics(updatedList,attributs, PicsNamesList);
 }
 
-// Switch button between Data and pictures
+// Switch button : switch between views of data and pictures
 function switchAction(){
     let DataBlock = document.getElementById("DataBlock");
     let PicsBlock = document.getElementById("PicsBlock");
@@ -74,6 +74,7 @@ function switchAction(){
     }
 }
 
+// Edition button : add, remove or edit ostraca
 function editionMode1(){
 	let dataBlock = document.getElementById("DataBlock");
 		if(dataBlock.style.display=="none"){
